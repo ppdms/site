@@ -11,14 +11,6 @@ pygmentsUseClasses = true
   dark = "auto"
   highlight = true
 
-[menu]
-  [[menu.main]]
-    identifier = "posts"
-    name = "home"
-    title = "home"
-    url = "/"
-    weight = 10
-
 [permalinks]
   posts = "/:title/"
 

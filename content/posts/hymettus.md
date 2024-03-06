@@ -8,6 +8,8 @@ tags = [
 ]
 +++
 
+I'm sorry for not compressing the images, but information loss scares me.
+
 ### Landscape
 ![Landscape](/images/landscape.jpeg "Landscape")
 
