@@ -1,28 +1,19 @@
-+++
-# This title is used as the og:title on Hugo's internal
-# opengraph structured data template on the home page.
-# See https://ogp.me/ and https://gohugo.io/templates/internal#open-graph.
-title = "Hugo ʕ•ᴥ•ʔ Bear"
-+++
-
-# A match made in heaven
-
-There is a website obesity crisis. Bloated websites full of scripts, ads, and trackers are slowing your readers down every time they try to read your well-crafted content.
-
-Hugo Bear Blog is all you need to build a fantastic and optimized site or blog. It works perfectly on **any** viewing device. All you need to focus on is writing good content.
-
-[Go to the original bear blog](https://bearblog.dev/).
-
+---
+title: "Basil Papadimas"
 ---
 
-What happens when you combine the worlds' fastest, most lightweight static site generator with a design theme built to provide you with free, no-nonsense, super-fast blogging capabilities?
+### Bio
 
-**Use this theme, and find out!**
+I am a second year CS undergraduate student at the Athens University of Economics and Business.
 
-Made with 💟 by [Jan Raasch](https://www.janraasch.com).
+### Contact
 
----
+**[me@ppdms.gr](mailto:me@ppdms.gr)**
 
-Simply publish content online, grow an audience, and keep your pages tiny, fast, and **optimized for search engines**.
+### My links
 
-Each page is ~5kb, and you can **host your blog yourself**.
+- [GitHub](https://github.com/ppdms)
+- [Goodreads](https://www.goodreads.com/papadimas)
+- [LinkedIn](https://www.linkedin.com/in/ppdms/)
+
+<!--- TODO: add a projects section after updating GitHub -->
