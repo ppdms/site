@@ -2,32 +2,32 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Basil Papadimas</title>
-    <link>https://ppdms.gr/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on Basil Papadimas</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <lastBuildDate>Wed, 06 Mar 2024 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://ppdms.gr/posts/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     
     <item>
       <title>Mt. Hymettus, 29-02-2024</title>
-      <link>https://ppdms.gr/mt.-hymettus-29-02-2024/</link>
+      <link>http://localhost:1313/mt.-hymettus-29-02-2024/</link>
       <pubDate>Wed, 06 Mar 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://ppdms.gr/mt.-hymettus-29-02-2024/</guid>
+      <guid>http://localhost:1313/mt.-hymettus-29-02-2024/</guid>
       <description>&lt;h3 id=&#34;landscape&#34;&gt;Landscape&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://ppdms.gr/images/landscape.jpeg&#34; alt=&#34;Landscape&#34; title=&#34;Landscape&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/landscape.jpeg&#34; alt=&#34;Landscape&#34;  title=&#34;Landscape&#34;  width=6000 height=&#34;4000&#34;  /&gt;&lt;/p&gt;
 &lt;h3 id=&#34;nkua--ntua&#34;&gt;NKUA &amp;amp; NTUA&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://ppdms.gr/images/NKUA&amp;amp;NTUA.jpeg&#34; alt=&#34;NKUA &amp;amp; NTUA&#34; title=&#34;NKUA &amp;amp; NTUA&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/NKUA&amp;amp;NTUA.jpeg&#34; alt=&#34;NKUA &amp;amp;amp; NTUA&#34;  title=&#34;NKUA &amp;amp; NTUA&#34;  width=6000 height=&#34;4000&#34;  /&gt;&lt;/p&gt;
 &lt;h3 id=&#34;fox&#34;&gt;Fox&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://ppdms.gr/images/fox.jpeg&#34; alt=&#34;Fox&#34; title=&#34;Fox&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/fox.jpeg&#34; alt=&#34;Fox&#34;  title=&#34;Fox&#34;  width=6000 height=&#34;4000&#34;  /&gt;&lt;/p&gt;
 &lt;h3 id=&#34;radar&#34;&gt;Radar?&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://ppdms.gr/images/radar.jpeg&#34; alt=&#34;Radar?&#34; title=&#34;Radar?&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/radar.jpeg&#34; alt=&#34;Radar?&#34;  title=&#34;Radar?&#34;  width=6000 height=&#34;4000&#34;  /&gt;&lt;/p&gt;
 &lt;h3 id=&#34;church&#34;&gt;Church&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://ppdms.gr/images/church.jpeg&#34; alt=&#34;Church&#34; title=&#34;Church&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/church.jpeg&#34; alt=&#34;Church&#34;  title=&#34;Church&#34;  width=3685 height=&#34;5527&#34;  /&gt;&lt;/p&gt;
 </description>
     </item>
     
