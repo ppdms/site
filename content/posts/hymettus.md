@@ -11,17 +11,17 @@ tags = [
 I'm sorry for not compressing the images, but information loss scares me.
 
 ### Landscape
-![Landscape](/images/landscape.jpeg "Landscape")
+![Landscape](/images/hymettus/landscape.jpeg "Landscape")
 
 ### NKUA & NTUA
-![NKUA & NTUA](/images/NKUA&NTUA.jpeg "NKUA & NTUA")
+![NKUA & NTUA](/images/hymettus/NKUA&NTUA.jpeg "NKUA & NTUA")
 
 ### Fox
-![Fox](/images/fox.jpeg "Fox")
+![Fox](/images/hymettus/fox.jpeg "Fox")
 
 ### Radar?
-![Radar?](/images/radar.jpeg "Radar?")
+![Radar?](/images/hymettus/radar.jpeg "Radar?")
 
 ### Church
-![Church](/images/church.jpeg "Church")
+![Church](/images/hymettus/church.jpeg "Church")
 
