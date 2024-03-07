@@ -1,7 +1,7 @@
 +++
 author = "Basil Papadimas"
-title = "Mt. Hymettus, 29-02-2024"
-date = "2024-03-06"
+title = "Mt. Hymettus"
+date = "2024-02-29"
 description = "A hike to Mt. Hymettus on a cloudy winter day."
 tags = [
     "hiking",
