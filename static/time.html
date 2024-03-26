@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        div {
+            text-align: center;
+        }
+
+        p,
+        h1 {
+            font-family: 'Inter', sans-serif;
+        }
+
+        p {
+            font-size: 20vw;
+            font-variant: tabular-nums;
+            color: black;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 4vw;
+            color: DarkGray;
+            margin: 0;
+        }
+    </style>
+
+    <script>
+
+
+        function getSeconds() {
+            const d = new Date();
+            return 3600 * d.getHours() + 60 * d.getMinutes() + d.getSeconds();
+        }
+
+        const interval = setInterval(function () {
+            if (getSeconds() >= 23*60*60 || getSeconds() < 7*60*60) {
+                document.title = document.getElementById("percentage").innerHTML = "Go to sleep.";
+            }
+            else {
+                document.title = document.getElementById("percentage").innerHTML = ((100*(getSeconds() - 7*60*60)) / (16*60*60)).toString().slice(0, 4).concat("%");
+            }
+        }, 1000);
+
+    </script>
+
+</head>
+
+<body>
+
+    <div>
+        <p id="percentage">??.?%</p>
+        <h1>0.1% ≈ 1 min</h1>
+    </div>
+
+</body>
+
+</html>
