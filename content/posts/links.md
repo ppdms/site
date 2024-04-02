@@ -10,6 +10,9 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
 
+### 2024-04-02
+- https://www.youtube.com/watch?v=mzwwofB5_Nc
+
 ### 2024-03-30
 - https://wiki.c2.com/?PrematureOptimization
 - https://www.astralcodexten.com/p/practically-a-book-review-rootclaim
