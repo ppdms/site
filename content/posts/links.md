@@ -10,6 +10,9 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
 
+### 2024-04-03
+- https://www.youtube.com/watch?v=IdTDr0VH1aU
+
 ### 2024-04-02
 - https://www.youtube.com/watch?v=mzwwofB5_Nc
 
