@@ -10,6 +10,10 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
 
+### 2024-04-05
+- https://www.mayerowitz.io/blog/mario-meets-pareto
+    Everyone should read this.
+
 ### 2024-04-04
 - https://en.wikipedia.org/wiki/London_Post_Office_Railway
 - https://en.wikipedia.org/wiki/Third_place
