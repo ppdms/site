@@ -10,6 +10,9 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
 
+### 2024-04-10
+- https://en.wikipedia.org/wiki/This_too_shall_pass
+
 ### 2024-04-06
 - https://www.youtube.com/watch?v=qbKNEDKoSRU
 
