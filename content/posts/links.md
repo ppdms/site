@@ -1,7 +1,7 @@
 +++
 author = "Basil Papadimas"
 title = "Backlinks"
-date = "2024-03-30"
+date = "2024-04-16"
 description = "Interesting content I've come across online. Inclusion doesn't imply endorsement."
 tags = [
     "writing",
@@ -9,6 +9,9 @@ tags = [
 +++
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
+
+### 2024-04-16
+- https://en.wikipedia.org/wiki/Cloud_seeding_in_the_United_Arab_Emirates
 
 ### 2024-04-10
 - https://en.wikipedia.org/wiki/This_too_shall_pass
