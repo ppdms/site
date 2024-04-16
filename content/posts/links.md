@@ -12,6 +12,7 @@ I'm going to periodically update this post with interesting content I've come ac
 
 ### 2024-04-16
 - https://en.wikipedia.org/wiki/Cloud_seeding_in_the_United_Arab_Emirates
+- https://en.wikipedia.org/wiki/Capacitor-input_filter
 
 ### 2024-04-10
 - https://en.wikipedia.org/wiki/This_too_shall_pass
