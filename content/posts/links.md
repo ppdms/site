@@ -1,7 +1,7 @@
 +++
 author = "Basil Papadimas"
 title = "Backlinks"
-date = "2024-04-16"
+date = "2024-04-24"
 description = "Interesting content I've come across online. Inclusion doesn't imply endorsement."
 tags = [
     "writing",
@@ -9,6 +9,11 @@ tags = [
 +++
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
+
+### 2024-04-24
+- https://en.wikipedia.org/wiki/Memorylessness
+
+    I think about this almost every day.
 
 ### 2024-04-20
 - https://www.youtube.com/watch?v=9e4BWBdxBA8
