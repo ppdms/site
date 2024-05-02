@@ -10,6 +10,11 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
 
+### 2024-05-02
+- https://mitchellh.com/writing/nix-with-dockerfiles
+
+    So true!
+
 ### 2024-04-24
 - https://en.wikipedia.org/wiki/Memorylessness
 
