@@ -10,6 +10,9 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
 
+### 2024-05-19
+- https://en.wikipedia.org/wiki/Enclave_and_exclave#True_exclaves
+
 ### 2024-05-03
 - https://en.wikipedia.org/wiki/10th_edition_of_Systema_Naturae
 
