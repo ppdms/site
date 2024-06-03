@@ -10,6 +10,10 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
 
+### 2024-06-03
+- https://www.youtube.com/watch?v=gk7D_TliAuE
+- https://en.wikipedia.org/wiki/Iberian_ship_development,_1400–1600
+
 ### 2024-05-19
 - https://en.wikipedia.org/wiki/Enclave_and_exclave#True_exclaves
 
