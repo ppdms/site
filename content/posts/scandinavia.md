@@ -10,11 +10,21 @@ tags = [
 
 Click on an image to load it in full resolution.
 
+### Arrival
+[![Arrival](/images/scandinavia/Arrival_min.jpeg "Arrival")](/images/scandinavia/Arrival.jpeg)
+
+### Flytoget
+[![Flytoget](/images/scandinavia/Flytoget_min.jpeg "Finse")](/images/scandinavia/Flytoget.jpeg)
+
 ### Finse
 [![Finse](/images/scandinavia/Finse_min.jpeg "Finse")](/images/scandinavia/Finse.jpeg)
+[![Finse2](/images/scandinavia/Finse_min_2.jpeg "Finse")](/images/scandinavia/Finse_2.jpeg)
 
 ### Bergensbanen
 [![Bergensbanen](/images/scandinavia/Bergensbanen_min.jpeg "Bergensbanen")](/images/scandinavia/Bergensbanen.jpeg)
+[![Bergensbanen2](/images/scandinavia/Bergensbanen_min_2.jpeg "Bergensbanen")](/images/scandinavia/Bergensbanen_2.jpeg)
+[![Forest](/images/scandinavia/forest_min.jpeg "Forest")](/images/scandinavia/forest.jpeg)
+[![Hallingskeid](/images/scandinavia/Hallingskeid_min.jpeg "Forest")](/images/scandinavia/Hallingskeid.jpeg)
 
 ### Bergen
 [![Bergen](/images/scandinavia/Bergen_min.jpeg "Bergen")](/images/scandinavia/Bergen.jpeg)
@@ -27,6 +37,9 @@ Click on an image to load it in full resolution.
 
 ### Embraer E190-E2
 [![Embraer E190-E2](/images/scandinavia/Embraer_min.jpeg "Embraer E190-E2")](/images/scandinavia/Embraer.jpeg)
+
+### Tromsø domkirke
+[![Tromsø_domkirke](/images/scandinavia/Tromsø_domkirke_min.jpeg "Tromsø domkirke")](/images/scandinavia/Tromsø_domkirke.jpeg)
 
 ### Before GPS
 [![Sextant](/images/scandinavia/Sextant_min.jpeg "Sextant")](/images/scandinavia/Sextant.jpeg)
