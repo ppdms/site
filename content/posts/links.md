@@ -10,6 +10,13 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
 
+### 2024-07-24
+- https://en.wikipedia.org/wiki/Adipocyte
+
+    Early takeaways from learning about human physiology (summer project):
+    - even fat is a cell
+    - almost everything important is a protein (say enzymes, [ribosomes](https://en.wikipedia.org/wiki/Ribosomal_protein), ...)
+
 ### 2024-07-12
 - https://en.wikipedia.org/wiki/Garden_Route
 
