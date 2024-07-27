@@ -10,6 +10,12 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
 
+### 2024-07-27
+- https://en.wikipedia.org/wiki/Nils_Olav
+- https://en.wikipedia.org/wiki/Neural_adaptation#Weight_training
+    
+    Especially true for grip strength, apparently.
+
 ### 2024-07-24
 - https://en.wikipedia.org/wiki/Adipocyte
 
