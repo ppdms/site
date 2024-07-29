@@ -1,6 +1,6 @@
 +++
 author = "Basil Papadimas"
-title = "Scandinavia"
+title = "Norway & Denmark"
 date = "2024-02-15"
 description = "A trip to Norway and Denmark."
 tags = [

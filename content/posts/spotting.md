@@ -21,9 +21,6 @@ Click on an image to load it in full resolution.
 ### Bergen Fløibanen
 [![bergen](/images/spotting/bergen_min.jpeg "bergen")](/images/spotting/bergen.jpeg)
 
-### Phaleron Bay
-[![phaleron](/images/spotting/PhaleronBay_min.jpeg "bergen")](/images/spotting/PhaleronBay.jpeg)
-
 ### Belem
 [![belem1](/images/spotting/belem1_min.jpeg "belem1")](/images/spotting/belem1.jpeg)
 [![belem2](/images/spotting/belem2_min.jpeg "belem2")](/images/spotting/belem2.jpeg)

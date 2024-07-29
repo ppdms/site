@@ -1,8 +1,8 @@
 +++
 author = "Basil Papadimas"
-title = "Rome"
+title = "Postcards from Italy"
 date = "2024-07-01"
-description = "Rome trip to take part in 2024 European Huawei Seeds for the Future startup competition."
+description = "Rome trip to compete at the 2024 European Huawei Seeds for the Future startup competition."
 tags = [
     "italy", "trip", "huawei", "startup", "business"
 ]
