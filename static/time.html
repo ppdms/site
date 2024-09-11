@@ -3,13 +3,20 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
     <style>
+        :root {
+          font-family: Inter, sans-serif;
+          font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+        }
+        @supports (font-variation-settings: normal) {
+          :root { font-family: InterVariable, sans-serif; }
+        }
+        
         body {
             margin: 0;
             height: 100vh;
@@ -42,8 +49,6 @@
     </style>
 
     <script>
-
-
         function getSeconds() {
             const d = new Date();
             return 3600 * d.getHours() + 60 * d.getMinutes() + d.getSeconds();
@@ -57,7 +62,6 @@
                 document.title = document.getElementById("percentage").innerHTML = ((100*(getSeconds() - 7*60*60)) / (16*60*60)).toString().slice(0, 4).concat("%");
             }
         }, 1000);
-
     </script>
 
 </head>
