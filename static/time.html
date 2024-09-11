@@ -32,10 +32,11 @@
         p,
         h1 {
             font-family: 'Inter', sans-serif;
+            font-weight: 600;
         }
 
         p {
-            font-size: 20vw;
+            font-size: 15vw;
             font-variant: tabular-nums;
             color: black;
             margin: 0;
@@ -56,10 +57,13 @@
 
         const interval = setInterval(function () {
             if (getSeconds() >= 23*60*60 || getSeconds() < 7*60*60) {
+                document.getElementById("note").innerHTML = "";
                 document.title = document.getElementById("percentage").innerHTML = "Go to sleep.";
             }
             else {
+                document.getElementById("note").innerHTML = "07:00  23:00 (0.1%  1 min)";
                 document.title = document.getElementById("percentage").innerHTML = ((100*(getSeconds() - 7*60*60)) / (16*60*60)).toString().slice(0, 4).concat("%");
+                document.getElementById("note2").innerHTML = "";
             }
         }, 1000);
     </script>
@@ -69,9 +73,8 @@
 <body>
 
     <div>
-        <h1>[07:00, 23:00) → [0%, 100%)</h1>
-        <p id="percentage">??.?%</p>
-        <h1>0.1% ≈ 1 min</h1>
+        <p id="percentage"></p>
+        <h1 id="note"></h1>
     </div>
 
 
