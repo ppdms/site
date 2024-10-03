@@ -10,6 +10,9 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
 
+### 2024-10-03
+- https://en.wikipedia.org/wiki/Skeletal_muscle#Fiber_types
+
 ### 2024-09-18
 - https://aeroprecipe.com/recipes/tim-wendelboe
     
