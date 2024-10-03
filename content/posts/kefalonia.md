@@ -9,7 +9,6 @@ tags = [
 +++
 
 Secretly the best time to visit.
-
 Click on an image to load it in full resolution.
 
 ### Ainos
