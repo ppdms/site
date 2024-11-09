@@ -18,12 +18,16 @@ Click on an image to load it in full resolution.
 
 ### Finse
 [![Finse](/images/scandinavia/Finse_min.jpeg "Finse")](/images/scandinavia/Finse.jpeg)
+
 [![Finse2](/images/scandinavia/Finse_min_2.jpeg "Finse")](/images/scandinavia/Finse_2.jpeg)
 
 ### Bergensbanen
 [![Bergensbanen](/images/scandinavia/Bergensbanen_min.jpeg "Bergensbanen")](/images/scandinavia/Bergensbanen.jpeg)
+
 [![Bergensbanen2](/images/scandinavia/Bergensbanen_min_2.jpeg "Bergensbanen")](/images/scandinavia/Bergensbanen_2.jpeg)
+
 [![Forest](/images/scandinavia/forest_min.jpeg "Forest")](/images/scandinavia/forest.jpeg)
+
 [![Hallingskeid](/images/scandinavia/Hallingskeid_min.jpeg "Forest")](/images/scandinavia/Hallingskeid.jpeg)
 
 ### Bergen

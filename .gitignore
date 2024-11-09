@@ -3,3 +3,7 @@ public/
 *.lock
 */.DS_Store
 .DS_Store
+.wrangler/
+node_modules/
+package-lock.json
+package.json
