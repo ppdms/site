@@ -12,6 +12,9 @@ I'm going to periodically update this post with interesting content I've come ac
 
 ### 2024-11-09
 - [This Is What Happens to Your Body on a Thru-Hike](https://www.outsideonline.com/outdoor-adventure/hiking-and-backpacking/what-happens-your-body-thru-hike/)
+- [Mineral lick - Wikipedia](https://en.wikipedia.org/wiki/Mineral_lick)
+
+    They need electrolytes too...
 
 ### 2024-11-04
 - [The Kinematics of Sitting - Research - Herman Miller](https://www.hermanmiller.com/research/categories/white-papers/the-kinematics-of-sitting/)
