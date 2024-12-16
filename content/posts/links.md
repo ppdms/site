@@ -8,7 +8,13 @@ tags = [
 ]
 +++
 
-I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something thought provoking.
+I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something to be thought provoking.
+
+### 2024-12-16
+- [List of long-distance footpaths - Wikipedia](https://en.wikipedia.org/wiki/List_of_long-distance_footpaths)
+
+### 2024-11-13
+- [Pearl River Delta - Wikipedia](https://en.wikipedia.org/wiki/Pearl_River_Delta)
 
 ### 2024-11-09
 - [This Is What Happens to Your Body on a Thru-Hike](https://www.outsideonline.com/outdoor-adventure/hiking-and-backpacking/what-happens-your-body-thru-hike/)
