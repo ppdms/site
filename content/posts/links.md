@@ -10,6 +10,18 @@ tags = [
 
 I'm going to periodically update this post with interesting content I've come across online. Inclusion here doesn't necessarily imply endorsement, only that I found something to be thought provoking.
 
+### 2025-01-11
+- [Personality Basins | near.blog](https://near.blog/personality-basins/)
+
+### 2024-12-31
+- [Extinction (psychology) - Wikipedia](https://en.wikipedia.org/wiki/Extinction_(psychology))
+
+    Another piece of Cephalonian wisdom: *«Καλή Αποκοπή!»*.
+
+### 2024-12-21
+- [Trouville-sur-Mer — Wikipédia](https://fr.wikipedia.org/wiki/Trouville-sur-Mer#Trouville_dans_la_peinture)
+- [Hypothalamic–pituitary–adrenal axis - Wikipedia](https://en.wikipedia.org/wiki/Hypothalamic%E2%80%93pituitary%E2%80%93adrenal_axis)
+
 ### 2024-12-16
 - [List of long-distance footpaths - Wikipedia](https://en.wikipedia.org/wiki/List_of_long-distance_footpaths)
 

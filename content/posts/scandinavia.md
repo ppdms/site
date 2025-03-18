@@ -8,8 +8,6 @@ tags = [
 ]
 +++
 
-Click on an image to load it in full resolution.
-
 ### Arrival
 [![Arrival](/images/scandinavia/Arrival_min.jpeg "Arrival")](/images/scandinavia/Arrival.jpeg)
 
