@@ -1,0 +1,39 @@
+# Operating system files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+
+# Hugo output and caches
+/public/
+/resources/_gen/
+/.hugo_build.lock
+
+# Cloudflare Wrangler
+/.wrangler/
+
+# Node tooling
+/node_modules/
+package-lock.json
+package.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local secrets and environment files
+.secrets
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# Editor and temporary files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

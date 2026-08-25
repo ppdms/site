@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+{{- partial "head.html" . -}}
+
+<body>
+	{{- partial "header.html" . -}}
+	<div id="layout"{{ if .IsHome }} class="has-sidebar"{{ end }}>
+		{{- if .IsHome }}{{ partial "sidebar.html" . }}{{ end -}}
+		<main id="content"{{ if eq .Type "travel" }} class="wide"{{ end }}>
+			{{- block "main" . }}{{- end }}
+		</main>
+	</div>
+	{{- partial "footer.html" . -}}
+	{{ with site.Params.cloudflare_analytics_token -}}
+	<!-- Cloudflare Web Analytics -->
+	<script defer src='/analytics/b.js' data-cf-beacon='{"token": "{{ . }}"}'></script>
+	<!-- End Cloudflare Web Analytics -->
+	{{- end }}
+</body>
+
+</html>
