@@ -1,9 +1,0 @@
-<li class="post-entry">
-    <a href="{{ .Permalink }}">
-        <h4 class="post-title">{{ .Title }}</h4>
-        <div class="post-meta">
-            <time>{{ .Date | time.Format (i18n "posts.date") }}</time>
-        </div>
-        {{- with .Description }}<p class="post-desc">{{ . }}</p>{{ end -}}
-    </a>
-</li>

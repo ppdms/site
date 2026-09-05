@@ -1,0 +1,221 @@
+---
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import PhotoViewer from "./PhotoViewer.astro";
+
+interface Props {
+  folder: string;
+  photoCaptions: boolean;
+  captions?: Record<string, string>;
+  alts?: Record<string, string>;
+}
+
+const { folder, photoCaptions, captions = {}, alts = {} } = Astro.props;
+
+// Eager typed import.meta.glob over all travel images
+const allImages = import.meta.glob<{ default: ImageMetadata }>(
+  "../content/posts/**/*.{jpeg,jpg,JPG,JPEG}",
+  { eager: true }
+);
+
+interface ImageMetadataWithClone extends ImageMetadata {
+  readonly clone?: ImageMetadata;
+  readonly fsPath?: string;
+}
+
+// Filter to images in the requested folder
+const folderEntries: Array<{ filename: string; metadata: ImageMetadata }> = [];
+for (const [path, mod] of Object.entries(allImages)) {
+  const normalizedPath = path.replace(/\\/g, "/");
+  const parts = normalizedPath.split("/");
+  const fileFolder = parts[parts.length - 2];
+  const filename = parts[parts.length - 1];
+
+  if (fileFolder === folder) {
+    const importedMetadata = mod.default as ImageMetadataWithClone;
+    const metadata = importedMetadata.clone
+      ? { ...importedMetadata.clone, fsPath: importedMetadata.fsPath }
+      : importedMetadata;
+    folderEntries.push({ filename, metadata });
+  }
+}
+
+// Deterministic alphabetical sort (preserves "01-...", "02-...", etc.)
+folderEntries.sort((a, b) => a.filename.localeCompare(b.filename));
+
+const displayWidths = [480, 800, 1200, 1600];
+
+// Process all images for grid and viewer
+interface GridItem {
+  filename: string;
+  width: number;
+  height: number;
+  caption: string;
+  alt: string;
+  hasCaption: boolean;
+  linkLabel: string;
+  defaultSrc: string;
+  srcset: string;
+  fullViewSrc: string;
+  sources: Array<{ src: string; width: number; height: number }>;
+}
+
+const gridItems: GridItem[] = await Promise.all(
+  folderEntries.map(async ({ filename, metadata }, index) => {
+    const caption = captions[filename] || "";
+    const alt = Object.hasOwn(alts, filename) ? alts[filename] : caption;
+    const hasCaption = Boolean(photoCaptions && caption);
+    const linkLabel = caption || `View photograph ${index + 1} of ${folderEntries.length}`;
+
+    const originalLongEdge = Math.max(metadata.width, metadata.height);
+    const isLandscape = metadata.width >= metadata.height;
+    const validLongEdges = displayWidths.filter((edge) => edge <= originalLongEdge);
+    if (validLongEdges.length === 0) {
+      validLongEdges.push(originalLongEdge);
+    }
+
+    const transformedSources = await Promise.all(
+      validLongEdges.map(async (longEdge) => {
+        const width = isLandscape
+          ? Math.min(longEdge, metadata.width)
+          : Math.max(1, Math.round((longEdge / metadata.height) * metadata.width));
+        const img = await getImage({
+          src: metadata,
+          format: "webp",
+          width,
+        });
+        const w = typeof img.attributes.width === "number" ? img.attributes.width : width;
+        const h =
+          typeof img.attributes.height === "number"
+            ? img.attributes.height
+            : Math.max(1, Math.round((w / metadata.width) * metadata.height));
+        return {
+          src: img.src,
+          width: w,
+          height: h,
+        };
+      })
+    );
+
+    // Full-view derivative capped to 2560px long edge
+    const fullTargetWidth = isLandscape
+      ? Math.min(2560, metadata.width)
+      : Math.max(1, Math.round((Math.min(2560, originalLongEdge) / metadata.height) * metadata.width));
+    const fullView = await getImage({
+      src: metadata,
+      format: "webp",
+      width: fullTargetWidth,
+    });
+
+    const allSources = [...transformedSources];
+    const fullViewWidth = typeof fullView.attributes.width === "number" ? fullView.attributes.width : fullTargetWidth;
+    const fullViewHeight = typeof fullView.attributes.height === "number" ? fullView.attributes.height : Math.round((fullViewWidth / metadata.width) * metadata.height);
+
+    if (!allSources.some((s) => s.width === fullViewWidth)) {
+      allSources.push({
+        src: fullView.src,
+        width: fullViewWidth,
+        height: fullViewHeight,
+      });
+    }
+
+    allSources.sort((a, b) => a.width - b.width);
+
+    const srcset = allSources.map((s) => `${s.src} ${s.width}w`).join(", ");
+    const defaultSrc = allSources[0].src;
+
+    return {
+      filename,
+      width: metadata.width,
+      height: metadata.height,
+      caption,
+      alt,
+      hasCaption,
+      linkLabel,
+      defaultSrc,
+      srcset,
+      fullViewSrc: fullView.src,
+      sources: allSources,
+    };
+  })
+);
+
+// Photo payload for viewer controller
+const viewerPhotos = gridItems.map((item) => ({
+  id: item.filename,
+  width: item.width,
+  height: item.height,
+  alt: item.alt,
+  caption: item.caption || undefined,
+  original: item.fullViewSrc,
+  sources: item.sources,
+}));
+const viewerData = JSON.stringify(viewerPhotos).replaceAll("<", "\\u003c");
+---
+
+<div class="photo-grid travel-gallery" data-folder={folder}>
+  {gridItems.map((item, index) => {
+    const isFirstRow = index < 2;
+    return (
+      <figure style={`--ar: ${item.width / item.height}`}>
+        <a
+          href={item.fullViewSrc}
+          aria-label={item.linkLabel}
+          data-id={item.filename}
+        >
+          <img
+            src={item.defaultSrc}
+            srcset={item.srcset}
+            sizes="(min-width: 960px) 45vw, (min-width: 700px) 48vw, 96vw"
+            width={item.width}
+            height={item.height}
+            loading={isFirstRow ? "eager" : "lazy"}
+            decoding="async"
+            alt={item.alt}
+          />
+        </a>
+        {item.hasCaption && <figcaption>{item.caption}</figcaption>}
+      </figure>
+    );
+  })}
+  <PhotoViewer id={`viewer-${folder}`} />
+  <script is:inline type="application/json" id={`viewer-data-${folder}`} set:html={viewerData}></script>
+</div>
+
+<script>
+  import { createViewer } from "@ppdms/gallerydeluxe";
+  import type { Photo } from "@ppdms/gallerydeluxe/types";
+
+  const galleries = document.querySelectorAll<HTMLElement>(".travel-gallery");
+  for (const gallery of galleries) {
+    const folder = gallery.dataset.folder;
+    if (!folder) continue;
+    const dialog = document.getElementById(`viewer-${folder}`);
+    const dataElement = document.getElementById(`viewer-data-${folder}`);
+    if (!(dialog instanceof HTMLDialogElement) || !dataElement) continue;
+
+    const viewerPhotos = JSON.parse(dataElement.textContent || "[]") as Photo[];
+    const viewer = createViewer(dialog, viewerPhotos, {
+      syncImageQuery: false,
+      enableExif: false,
+      downloadLabel: "Open full size",
+    });
+
+    const links = gallery.querySelectorAll<HTMLAnchorElement>("figure > a");
+    links.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const id = link.getAttribute("data-id");
+        if (id) {
+          viewer.open(id, link);
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  .travel-gallery {
+    width: 100%;
+  }
+</style>

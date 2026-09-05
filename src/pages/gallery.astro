@@ -1,0 +1,107 @@
+---
+import { parseManifest } from "@ppdms/gallerydeluxe/types";
+import type { GalleryManifest } from "@ppdms/gallerydeluxe/types";
+import galleryManifestSource from "../../static/gallery/gallery.json?raw";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import PhotoViewer from "../components/PhotoViewer.astro";
+import "../styles/gallery.css";
+
+const manifest: GalleryManifest = parseManifest(
+  JSON.parse(galleryManifestSource)
+);
+
+function pickNoScriptSource(photo: GalleryManifest["images"][number]) {
+  const displaySources = photo.sources.filter(
+    (source) => Math.max(source.width, source.height) <= 1280
+  );
+  return (displaySources.length > 0 ? displaySources : photo.sources).at(-1);
+}
+---
+
+<SiteLayout
+  title="Gallery"
+  description="A contact sheet of photographs by Basil Papadimas."
+  isGallery={true}
+>
+  <section id="gallery-page" aria-labelledby="gallery-heading">
+    <h1 id="gallery-heading" class="sr-only">Gallery</h1>
+    <noscript>
+      <ol class="gallery-noscript-list">
+        {manifest.images.map((photo, index) => {
+          const source = pickNoScriptSource(photo);
+          return source ? (
+            <li>
+              <a
+                href={source.src}
+                aria-label={photo.alt || `Open photo ${index + 1} of ${manifest.images.length}`}
+              >
+                <img
+                  src={source.src}
+                  width={source.width}
+                  height={source.height}
+                  loading="lazy"
+                  decoding="async"
+                  alt={photo.alt}
+                />
+              </a>
+            </li>
+          ) : null;
+        })}
+      </ol>
+    </noscript>
+    <div
+      id="gallerydeluxe"
+      class="gd-contact-sheet"
+      data-src="/gallery/gallery.json"
+      aria-live="polite"
+    >
+      <p class="gallery-loading">Loading photographs…</p>
+    </div>
+    <PhotoViewer id="gd-viewer" />
+  </section>
+</SiteLayout>
+
+<script>
+  import { mountGallery } from "@ppdms/gallerydeluxe";
+  import { parseManifest } from "@ppdms/gallerydeluxe/types";
+
+  const container = document.getElementById("gallerydeluxe");
+  const dialog = document.getElementById("gd-viewer");
+  let controller: { destroy(): void } | undefined;
+
+  async function loadGallery(): Promise<void> {
+    if (!container || !(dialog instanceof HTMLDialogElement)) return;
+    controller?.destroy();
+    container.innerHTML = '<p class="gallery-loading">Loading photographs…</p>';
+
+    try {
+      const response = await fetch(container.dataset.src || "/gallery/gallery.json");
+      if (!response.ok) {
+        throw new Error(`Gallery manifest returned HTTP ${response.status}`);
+      }
+      const manifest = parseManifest(await response.json());
+      controller = mountGallery(container, manifest, {
+        shuffle: true,
+        reverse: true,
+        enableExif: true,
+        dialog,
+      });
+    } catch (error) {
+      console.error("GalleryDeluxe failed to initialize", error);
+      container.innerHTML = "";
+      const errorMessage = document.createElement("p");
+      errorMessage.className = "gallery-error";
+      errorMessage.textContent = "The gallery could not be loaded.";
+      const retry = document.createElement("button");
+      retry.type = "button";
+      retry.className = "gallery-retry";
+      retry.textContent = "Retry";
+      retry.addEventListener("click", () => {
+        void loadGallery();
+      });
+      container.append(errorMessage, retry);
+    }
+  }
+
+  void loadGallery();
+</script>

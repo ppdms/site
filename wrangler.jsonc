@@ -1,0 +1,58 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // The base environment is the non-production preview Worker; production is explicit below.
+  "name": "site-quality-preview",
+  "main": "./src/worker/index.ts",
+  "compatibility_date": "2026-09-04",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Host canonicalization must run before every static asset request.
+    "run_worker_first": true
+  },
+  "r2_buckets": [
+    {
+      "binding": "DATA",
+      "bucket_name": "data"
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  // Production custom domains are active; deploy with --env production intentionally.
+  "env": {
+    "production": {
+      "name": "site",
+      "workers_dev": false,
+      "r2_buckets": [
+        {
+          "binding": "DATA",
+          "bucket_name": "data"
+        }
+      ],
+      "routes": [
+        {
+          "pattern": "papadim.as",
+          "custom_domain": true
+        },
+        {
+          "pattern": "www.papadim.as",
+          "custom_domain": true
+        },
+        {
+          "pattern": "ppdms.gr",
+          "custom_domain": true
+        },
+        {
+          "pattern": "www.ppdms.gr",
+          "custom_domain": true
+        }
+      ]
+    }
+  }
+}

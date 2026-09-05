@@ -1,0 +1,88 @@
+main#content .prose {
+  max-width: 76rem;
+}
+
+main#content .prose p {
+  margin: 1.3rem 0;
+}
+
+main#content .prose h2,
+main#content .prose h3,
+main#content .prose h4 {
+  color: var(--text);
+  line-height: 1.25;
+}
+
+main#content .prose h2 {
+  margin-top: 3rem;
+  margin-bottom: 0;
+  font-size: var(--text-xl);
+}
+
+main#content .prose h3 {
+  margin-top: 2.4rem;
+  margin-bottom: 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+  font-size: var(--text-md);
+}
+
+main#content .prose ul,
+main#content .prose ol {
+  margin: 1.3rem 0;
+  padding-left: 2.6rem;
+}
+
+main#content .prose li {
+  margin: 0.3rem 0;
+}
+
+main#content .prose code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--code-bg);
+  padding: 0 0.5rem;
+}
+
+main#content .prose pre,
+main#content .prose pre.astro-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  margin: 1.8rem 0;
+  padding: 1.3rem 1.5rem;
+  overflow-x: auto;
+}
+
+main#content .prose pre.astro-code {
+  background: transparent !important;
+  color: var(--text) !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+}
+
+main#content .prose pre.astro-code code,
+main#content .prose pre.astro-code span {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+html[data-theme="dark"] .prose pre.astro-code,
+html[data-theme="dark"] .prose pre.astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .prose pre.astro-code,
+  html:not([data-theme="light"]) .prose pre.astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+}

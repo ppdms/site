@@ -1,0 +1,30 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="Page not found" description="The requested page could not be found.">
+  <section class="not-found" aria-labelledby="not-found-heading">
+    <h1 id="not-found-heading">Page not found</h1>
+    <p>The address does not point to a page on this site.</p>
+    <a href="/">Return home</a>
+  </section>
+</SiteLayout>
+
+<style>
+  .not-found {
+    max-width: 42rem;
+  }
+
+  .not-found h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  .not-found p {
+    margin-bottom: var(--space-5);
+    color: var(--muted);
+  }
+
+  .not-found a {
+    color: var(--accent);
+  }
+</style>

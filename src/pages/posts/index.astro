@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import PostList from "../../components/PostList.astro";
+
+const posts: CollectionEntry<"posts">[] = await getCollection("posts");
+const visiblePosts = posts.filter((post) => !post.data.draft);
+
+visiblePosts.sort((a, b) => {
+  const dateDiff = b.data.date.getTime() - a.data.date.getTime();
+  if (dateDiff !== 0) return dateDiff;
+  return a.data.slug.localeCompare(b.data.slug);
+});
+---
+
+<SiteLayout title="Posts" description="Articles and travel photographs by Basil Papadimas">
+  <div class="posts-page">
+    <header class="posts-page-header">
+      <h1 class="posts-page-title">Posts</h1>
+      <p class="posts-page-desc">Articles on technology, engineering, and travel notes.</p>
+    </header>
+    <PostList posts={visiblePosts} />
+  </div>
+</SiteLayout>
+
+<style>
+  .posts-page-header {
+    margin-bottom: var(--space-7);
+  }
+
+  .posts-page-title {
+    margin-bottom: var(--space-2);
+  }
+
+  .posts-page-desc {
+    font-size: 1.125rem;
+    color: var(--muted);
+  }
+</style>

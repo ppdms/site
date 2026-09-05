@@ -1,0 +1,29 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "module": "preserve",
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "jsx": "preserve",
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@ppdms/gallerydeluxe": ["gallerydeluxe/assets/js/gallerydeluxe/src/index.ts"],
+      "@ppdms/gallerydeluxe/*": ["gallerydeluxe/*"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "scripts/**/*",
+    "gallerydeluxe/assets/js/gallerydeluxe/**/*",
+    "astro.config.ts",
+    "vitest.worker.config.ts"
+  ],
+  "exclude": [
+    "dist",
+    "src/worker/**/*",
+    "test/worker.test.ts"
+  ]
+}

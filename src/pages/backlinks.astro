@@ -1,0 +1,213 @@
+---
+import { parse } from "yaml";
+import backlinksSource from "../data/backlinks.yaml?raw";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { renderMarkdownToHtml } from "../lib/markdown";
+
+interface BacklinkItem {
+  title?: string;
+  url?: string;
+  note?: string;
+  quote?: string;
+  attribution?: {
+    author?: string;
+    source?: string;
+    url?: string;
+  };
+}
+
+interface BacklinkEntry {
+  date: string;
+  items: BacklinkItem[];
+}
+
+interface BacklinksData {
+  title: string;
+  description: string;
+  body: string;
+  entries: BacklinkEntry[];
+}
+
+function isHttpUrl(value: unknown): value is string {
+  if (typeof value !== "string") return false;
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function formatDate(value: string): string {
+  const date = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function parseBacklinks(value: unknown): BacklinksData {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Backlinks data must be an object");
+  }
+  const root = value as Record<string, unknown>;
+  if (
+    typeof root.title !== "string" ||
+    typeof root.description !== "string" ||
+    typeof root.body !== "string" ||
+    !Array.isArray(root.entries)
+  ) {
+    throw new Error("Backlinks data has invalid top-level fields");
+  }
+
+  const entries: BacklinkEntry[] = [];
+  for (const [entryIndex, rawEntry] of root.entries.entries()) {
+    if (!rawEntry || typeof rawEntry !== "object" || Array.isArray(rawEntry)) {
+      throw new Error(`Backlinks entry ${entryIndex} must be an object`);
+    }
+    const entry = rawEntry as Record<string, unknown>;
+    if (typeof entry.date !== "string" || !Array.isArray(entry.items)) {
+      throw new Error(`Backlinks entry ${entryIndex} has invalid fields`);
+    }
+
+    const items: BacklinkItem[] = [];
+    for (const [itemIndex, rawItem] of entry.items.entries()) {
+      if (!rawItem || typeof rawItem !== "object" || Array.isArray(rawItem)) {
+        throw new Error(`Backlinks item ${entryIndex}/${itemIndex} must be an object`);
+      }
+      const item = rawItem as Record<string, unknown>;
+      const note = item.note;
+      if (note !== undefined && typeof note !== "string") {
+        throw new Error(`Backlinks note ${entryIndex}/${itemIndex} must be a string`);
+      }
+
+      if ("quote" in item) {
+        if (typeof item.quote !== "string") {
+          throw new Error(`Backlinks quote ${entryIndex}/${itemIndex} must be a string`);
+        }
+        let attribution: BacklinkItem["attribution"];
+        if (item.attribution !== undefined) {
+          if (
+            !item.attribution ||
+            typeof item.attribution !== "object" ||
+            Array.isArray(item.attribution)
+          ) {
+            throw new Error(`Backlinks attribution ${entryIndex}/${itemIndex} is invalid`);
+          }
+          const rawAttribution = item.attribution as Record<string, unknown>;
+          if (
+            typeof rawAttribution.author !== "string" ||
+            typeof rawAttribution.source !== "string" ||
+            !isHttpUrl(rawAttribution.url)
+          ) {
+            throw new Error(`Backlinks attribution ${entryIndex}/${itemIndex} is invalid`);
+          }
+          attribution = {
+            author: rawAttribution.author,
+            source: rawAttribution.source,
+            url: rawAttribution.url,
+          };
+        }
+        items.push({ quote: item.quote, note, attribution });
+      } else {
+        if (!isHttpUrl(item.url) || (item.title !== undefined && typeof item.title !== "string")) {
+          throw new Error(`Backlinks link ${entryIndex}/${itemIndex} is invalid`);
+        }
+        const title = typeof item.title === "string" ? item.title : undefined;
+        items.push({ title, url: item.url, note });
+      }
+    }
+    entries.push({ date: entry.date, items });
+  }
+
+  return {
+    title: root.title,
+    description: root.description,
+    body: root.body,
+    entries,
+  };
+}
+
+const backlinks = parseBacklinks(parse(backlinksSource));
+const updatedDate = backlinks.entries[0]?.date ?? "";
+const renderedEntries = await Promise.all(
+  backlinks.entries.map(async (entry) => ({
+    ...entry,
+    items: await Promise.all(
+      entry.items.map(async (item) => ({
+        ...item,
+        renderedNote: item.note ? await renderMarkdownToHtml(item.note) : "",
+        renderedQuote: item.quote ? await renderMarkdownToHtml(item.quote) : "",
+      }))
+    ),
+  }))
+);
+---
+
+<SiteLayout title={backlinks.title} description={backlinks.description}>
+  <article>
+    <header id="post-header">
+      <h1>{backlinks.title}</h1>
+      <div class="post-meta">
+        <time datetime={updatedDate}>Updated {formatDate(updatedDate)}</time>
+      </div>
+    </header>
+
+    <p>{backlinks.body}</p>
+
+    <div id="backlinks">
+      {renderedEntries.map((entry) => (
+        <section class="backlink-entry">
+          <h3>
+            <time datetime={entry.date}>{formatDate(entry.date)}</time>
+          </h3>
+          <ul>
+            {entry.items.map((item) => (
+              <li>
+                {item.quote ? (
+                  <>
+                    {item.renderedNote && <div class="note" set:html={item.renderedNote}></div>}
+                    <blockquote class="backlink-quote">
+                      <div set:html={item.renderedQuote}></div>
+                    </blockquote>
+                    {item.attribution && (
+                      <footer class="backlink-attribution">
+                        by <strong>{item.attribution.author}</strong>
+                        {item.attribution.source && <> on </>}
+                        {item.attribution.url && (
+                          <a href={item.attribution.url} target="_blank" rel="noopener noreferrer">
+                            <strong>{item.attribution.source}</strong>
+                            <svg
+                              aria-hidden="true"
+                              class="hi-svg-inline backlink-attribution-arrow"
+                              viewBox="5 5 14 14"
+                              fill="currentColor"
+                            >
+                              <path d="M5 17.59 15.59 7H9V5H19V15H17V8.41L6.41 19 5 17.59z"></path>
+                            </svg>
+                          </a>
+                        )}
+                      </footer>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {item.url && (
+                      <a href={item.url} target="_blank" rel="noopener noreferrer">
+                        {item.title || item.url}
+                      </a>
+                    )}
+                    {item.renderedNote && <div class="note" set:html={item.renderedNote}></div>}
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </article>
+</SiteLayout>

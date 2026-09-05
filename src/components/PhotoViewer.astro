@@ -1,0 +1,10 @@
+---
+import "../../gallerydeluxe/assets/css/gallerydeluxe/styles.css";
+
+interface Props {
+  id?: string;
+}
+const { id = "gd-viewer" } = Astro.props;
+---
+
+<dialog id={id} class="gd-viewer" aria-label="Photo viewer"></dialog>

@@ -1,0 +1,67 @@
+---
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import envelopeSource from "bootstrap-icons/icons/envelope-fill.svg?raw";
+import githubSource from "bootstrap-icons/icons/github.svg?raw";
+import linkedinSource from "bootstrap-icons/icons/linkedin.svg?raw";
+import { faGoodreads } from "@fortawesome/free-brands-svg-icons";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import PostList from "../components/PostList.astro";
+
+function normalizeBootstrapIcon(source: string) {
+  return source
+    .replace("<svg ", '<svg aria-hidden="true" ')
+    .replace(/class="([^"]+)"/, 'class="$1 hi-svg-inline"')
+    .replace('width="16"', 'width="1em"')
+    .replace('height="16"', 'height="1em"');
+}
+
+const envelopeIcon = normalizeBootstrapIcon(envelopeSource);
+const githubIcon = normalizeBootstrapIcon(githubSource);
+const linkedinIcon = normalizeBootstrapIcon(linkedinSource);
+const [goodreadsWidth, goodreadsHeight, , , goodreadsPath] = faGoodreads.icon;
+const goodreadsIcon = `<svg aria-hidden="true" class="hi-svg-inline" fill="currentColor" height="1em" viewBox="0 0 ${goodreadsWidth} ${goodreadsHeight}" width="1em"><path d="${goodreadsPath}"></path></svg>`;
+
+const posts: CollectionEntry<"posts">[] = await getCollection("posts");
+const homeEntries = await getCollection("home");
+if (homeEntries.length !== 1) {
+  throw new Error(`Expected exactly one home content entry, found ${homeEntries.length}`);
+}
+const { Content: HomeContent } = await render(homeEntries[0]);
+const visiblePosts = posts.filter((post) => !post.data.draft);
+
+// Sort descending by date, slug as deterministic tie-breaker
+visiblePosts.sort((a, b) => {
+  const dateDiff = b.data.date.getTime() - a.data.date.getTime();
+  if (dateDiff !== 0) return dateDiff;
+  return a.data.slug.localeCompare(b.data.slug);
+});
+---
+
+<SiteLayout hasSidebar>
+  <div slot="sidebar" class="home-sidebar">
+    <HomeContent />
+    <h2 id="more-of-me">More of Me</h2>
+    <ul>
+      <li>
+        <Fragment set:html={envelopeIcon} />
+        <a href="mailto:me@ppdms.gr">me@ppdms.gr</a>
+      </li>
+      <li>
+        <Fragment set:html={githubIcon} />
+        <a href="https://github.com/ppdms">GitHub</a>
+      </li>
+      <li>
+        <Fragment set:html={linkedinIcon} />
+        <a href="https://www.linkedin.com/in/ppdms/">LinkedIn</a>
+      </li>
+      <li>
+        <Fragment set:html={goodreadsIcon} />
+        <a href="https://www.goodreads.com/papadimas">Goodreads</a>
+      </li>
+    </ul>
+  </div>
+
+  <h3 class="section-title">Posts</h3>
+  <PostList posts={visiblePosts} />
+</SiteLayout>

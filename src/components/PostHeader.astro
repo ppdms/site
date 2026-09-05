@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  type?: "article" | "travel";
+  author?: string;
+}
+
+const { title, date } = Astro.props;
+
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  timeZone: "UTC",
+});
+const isoDate = date.toISOString().split("T")[0];
+---
+
+<header id="post-header">
+  <h1>{title}</h1>
+  <div class="post-meta">
+    <time datetime={isoDate}>{formattedDate}</time>
+  </div>
+</header>

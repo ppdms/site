@@ -1,0 +1,3 @@
+/gallery /gallery/ 308
+/gallery/gallery-thumbs/* https://data.ppdms.gr/gallery-thumbs/:splat 308
+/gallery/originals/* https://data.ppdms.gr/originals/:splat 308
