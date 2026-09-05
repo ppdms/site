@@ -15,8 +15,7 @@
     "test:worker": "vitest run --config vitest.worker.config.ts",
     "test:media": "tsx --test scripts/media.test.ts",
     "preview:worker": "wrangler dev --local --port 8787",
-    "deploy": "npm run build && wrangler deploy --env production --minify",
-    "deploy:preview": "npm run build && wrangler deploy --env=\"\" --minify",
+    "deploy": "npm run build && wrangler deploy --minify",
     "gallery:add": "tsx scripts/add-gallery-photos.ts",
     "gallery:migrate": "tsx scripts/migrate-gallery.ts",
     "backlinks:titles": "tsx scripts/format-links.ts"
