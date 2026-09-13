@@ -33,28 +33,6 @@ async function responseBytes(response: Response): Promise<Uint8Array> {
   return new Uint8Array(await response.arrayBuffer());
 }
 
-describe("Canonical host redirects", () => {
-  it("redirects legacy domains while preserving paths and queries", async () => {
-    const rootDomain = await requestAt(
-      "ppdms.gr",
-      "/posts/example?ref=legacy"
-    );
-    expect(rootDomain.status).toBe(308);
-    expect(rootDomain.headers.get("location")).toBe(
-      "https://papadim.as/posts/example?ref=legacy"
-    );
-    expect(rootDomain.headers.get("cache-control")).toBe(
-      "public, max-age=86400"
-    );
-
-    const wwwDomain = await requestAt("www.ppdms.gr", "/gallery/");
-    expect(wwwDomain.status).toBe(308);
-    expect(wwwDomain.headers.get("location")).toBe(
-      "https://papadim.as/gallery/"
-    );
-  });
-});
-
 describe("CV Worker", () => {
   beforeEach(async () => {
     await seedPdf();

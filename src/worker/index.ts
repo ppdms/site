@@ -1,7 +1,5 @@
 const PDF_KEY = "CV_Basil_Papadimas.pdf";
 const PDF_PATH = `/${PDF_KEY}`;
-const CANONICAL_HOST = "papadim.as";
-const LEGACY_HOSTS = new Set(["ppdms.gr", "www.ppdms.gr"]);
 const COMMON_HEADERS = {
   "Cache-Control": "no-store",
   "X-Content-Type-Options": "nosniff",
@@ -251,18 +249,6 @@ function redirectToPdf(request: Request): Response {
   return cvResponse(null, 302, undefined, { Location: location });
 }
 
-function redirectLegacyHost(request: Request): Response | undefined {
-  const url = new URL(request.url);
-  if (!LEGACY_HOSTS.has(url.hostname)) return undefined;
-
-  url.protocol = "https:";
-  url.hostname = CANONICAL_HOST;
-  return cvResponse(null, 308, undefined, {
-    Location: url.toString(),
-    "Cache-Control": "public, max-age=86400",
-  });
-}
-
 function missingPdf(head = false): Response {
   return cvResponse(head ? null : "CV not found", 404, {
     "Content-Type": "text/plain; charset=utf-8",
@@ -399,9 +385,6 @@ async function handlePdf(request: Request, env: Env): Promise<Response> {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const hostRedirect = redirectLegacyHost(request);
-    if (hostRedirect) return hostRedirect;
-
     const pathname = new URL(request.url).pathname;
     if (pathname === "/cv") {
       if (request.method !== "GET" && request.method !== "HEAD") {

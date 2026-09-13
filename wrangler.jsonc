@@ -9,8 +9,10 @@
     "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page",
-    // Host canonicalization must run before every static asset request.
-    "run_worker_first": true
+    "run_worker_first": [
+      "/cv",
+      "/CV_Basil_Papadimas.pdf"
+    ]
   },
   "r2_buckets": [
     {
@@ -22,7 +24,6 @@
     "enabled": true,
     "head_sampling_rate": 1
   },
-  // Production custom domains are active.
   "routes": [
     {
       "pattern": "papadim.as",
@@ -30,14 +31,6 @@
     },
     {
       "pattern": "www.papadim.as",
-      "custom_domain": true
-    },
-    {
-      "pattern": "ppdms.gr",
-      "custom_domain": true
-    },
-    {
-      "pattern": "www.ppdms.gr",
       "custom_domain": true
     }
   ]
