@@ -21,7 +21,7 @@ interface CliOptions {
 function parseCliArgs(args: string[]): CliOptions {
   const inputs: string[] = [];
   let upload = false;
-  let manifestPath = "static/gallery/gallery.json";
+  let manifestPath = "src/data/gallery.json";
   let outputDir = ".gallery-staging";
 
   for (let i = 0; i < args.length; i++) {

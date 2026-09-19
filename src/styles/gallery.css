@@ -148,39 +148,10 @@
   white-space: nowrap;
 }
 
-.gallery-loading,
-.gallery-error {
+.gd-empty,
+.gd-not-found {
   margin: 0;
   color: #5d574f;
-}
-
-.gallery-error {
-  padding: 1rem 0;
-}
-
-.gallery-retry {
-  min-height: 3.2rem;
-  padding: 0.6rem 1.2rem;
-  border: 1px solid rgba(80, 70, 52, 0.4);
-  border-radius: 2px;
-  background: rgba(255, 253, 246, 0.8);
-  color: #2c2923;
-  cursor: pointer;
-}
-
-.gallery-noscript-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-  gap: 0.8rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.gallery-noscript-list img {
-  display: block;
-  width: 100%;
-  height: auto;
 }
 
 @media (max-width: 699px) {

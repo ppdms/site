@@ -55,6 +55,12 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site || "https://papadim.
       } catch {}
     </script>
 
+    <!-- Marks scripted browsers, so the gallery sheet can stay hidden until it
+         has been arranged rather than flashing its unfinished layout. -->
+    <script is:inline>
+      document.documentElement.classList.add("gd-js");
+    </script>
+
     <!-- Deep-linked gallery photos start in the opaque lightbox, not the page shell. -->
     <script is:inline>
       try {
