@@ -665,7 +665,10 @@ main#content .instagram-media {
 }
 
 #layout.gallery-layout {
-  max-width: 144rem;
+  /* The contact sheet is a full-bleed board: the library scales its row
+     height and edge padding from the viewport width, so capping the layout
+     would leave the page background showing either side of the board. */
+  max-width: none;
   margin: 0 auto;
   padding: 0;
 }
