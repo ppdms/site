@@ -1,4 +1,4 @@
-const PDF_KEY = "CV_Basil_Papadimas.pdf";
+const PDF_KEY = "CV_Vassilis_Papadimas.pdf";
 const PDF_PATH = `/${PDF_KEY}`;
 const COMMON_HEADERS = {
   "Cache-Control": "no-store",
@@ -228,7 +228,7 @@ function pdfHeaders(
   headers.set("Content-Type", "application/pdf");
   headers.set(
     "Content-Disposition",
-    'inline; filename="CV_Basil_Papadimas.pdf"'
+    'inline; filename="CV_Vassilis_Papadimas.pdf"'
   );
   headers.set("Content-Length", String(contentLength));
   headers.set("ETag", object.httpEtag);

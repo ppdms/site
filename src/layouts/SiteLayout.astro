@@ -21,7 +21,7 @@ const {
   wide = false,
 } = Astro.props;
 
-const pageTitle = title ? `${title} — Basil Papadimas` : "Basil Papadimas";
+const pageTitle = title ? `${title} — Vassilis Papadimas` : "Vassilis Papadimas";
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site || "https://papadim.as").toString();
 ---
 
@@ -34,14 +34,14 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site || "https://papadim.
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="alternate" type="application/rss+xml" title="Basil Papadimas" href="/index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Vassilis Papadimas" href="/index.xml" />
 
     <!-- OpenGraph -->
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:type" content={type} />
-    <meta property="og:site_name" content="Basil Papadimas" />
+    <meta property="og:site_name" content="Vassilis Papadimas" />
 
     <!-- Inline theme initialization to prevent flash of unstyled theme -->
     <script is:inline>

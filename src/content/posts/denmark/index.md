@@ -1,6 +1,6 @@
 ---
 type: "travel"
-author: "Basil Papadimas"
+author: "Vassilis Papadimas"
 title: "Denmark"
 slug: "denmark"
 date: "2026-08-25"

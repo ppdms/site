@@ -1,5 +1,5 @@
 ---
-author: "Basil Papadimas"
+author: "Vassilis Papadimas"
 title: "Real-time Video Streaming with SRT"
 slug: "real-time-video-streaming-with-srt"
 date: "2025-09-09"

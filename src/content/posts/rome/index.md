@@ -1,6 +1,6 @@
 ---
 type: "travel"
-author: "Basil Papadimas"
+author: "Vassilis Papadimas"
 title: "Postcards from Italy"
 slug: "postcards-from-italy"
 date: "2024-07-01"

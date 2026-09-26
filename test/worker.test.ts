@@ -2,7 +2,7 @@ import { env } from "cloudflare:workers";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import worker from "../src/worker/index";
 
-const PDF_KEY = "CV_Basil_Papadimas.pdf";
+const PDF_KEY = "CV_Vassilis_Papadimas.pdf";
 const PDF_BYTES = new TextEncoder().encode(
   "deterministic cv fixture\n0123456789abcdefghijklmnopqrstuvwxyz"
 );
@@ -42,7 +42,7 @@ describe("CV Worker", () => {
     const getResponse = await request("/cv?from=home");
     expect(getResponse.status).toBe(302);
     expect(getResponse.headers.get("location")).toBe(
-      "https://site.test/CV_Basil_Papadimas.pdf"
+      "https://site.test/CV_Vassilis_Papadimas.pdf"
     );
     expect(getResponse.headers.get("cache-control")).toBe("no-store");
 
@@ -56,7 +56,7 @@ describe("CV Worker", () => {
     expect(getResponse.status).toBe(200);
     expect(getResponse.headers.get("content-type")).toBe("application/pdf");
     expect(getResponse.headers.get("content-disposition")).toBe(
-      'inline; filename="CV_Basil_Papadimas.pdf"'
+      'inline; filename="CV_Vassilis_Papadimas.pdf"'
     );
     expect(getResponse.headers.get("content-length")).toBe(
       String(PDF_BYTES.byteLength)

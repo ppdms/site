@@ -1,6 +1,6 @@
 ---
 type: "travel"
-author: "Basil Papadimas"
+author: "Vassilis Papadimas"
 title: "Norway & Denmark"
 slug: "norway-denmark"
 date: "2024-02-15"

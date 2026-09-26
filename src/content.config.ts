@@ -11,7 +11,7 @@ const RESERVED_SLUGS = new Set([
   "categories",
   "404",
   "cv",
-  "CV_Basil_Papadimas.pdf",
+  "CV_Vassilis_Papadimas.pdf",
 ]);
 
 function parseUtcDate(value: string | Date): Date {

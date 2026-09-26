@@ -4,7 +4,7 @@ import { createPostsFeed } from "../../lib/rss";
 export const GET: APIRoute = ({ site }) =>
   createPostsFeed(
     site,
-    "Posts — Basil Papadimas",
-    "Articles and travel photographs by Basil Papadimas.",
+    "Posts — Vassilis Papadimas",
+    "Articles and travel photographs by Vassilis Papadimas.",
     "/posts/index.xml"
   );

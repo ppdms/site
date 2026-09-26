@@ -1,6 +1,6 @@
 ---
 type: "travel"
-author: "Basil Papadimas"
+author: "Vassilis Papadimas"
 title: "Kefalonia in May"
 slug: "kefalonia-in-may"
 date: "2024-05-02"

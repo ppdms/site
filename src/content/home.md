@@ -1,5 +1,5 @@
 ---
-title: "Basil Papadimas"
+title: "Vassilis Papadimas"
 ---
 
 ## About
