@@ -27,7 +27,7 @@ body {
 
 .skip-link {
   position: absolute;
-  left: -9999px;
+  left: -999.9rem;
   top: 1rem;
   z-index: 1000;
   padding: 0.8rem 1.2rem;
@@ -41,13 +41,13 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline: 0.2rem solid var(--focus);
+  outline-offset: 0.2rem;
 }
 
 header#banner {
   background-color: var(--bg);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 0.1rem solid var(--border);
 }
 
 #banner-inner {
@@ -280,7 +280,7 @@ main#content article h3 {
   font-size: var(--text-md);
   margin-top: 2.4rem;
   padding-top: 1.2rem;
-  border-top: 1px solid var(--border);
+  border-top: 0.1rem solid var(--border);
 }
 
 main#content article h3:first-child {
@@ -319,7 +319,7 @@ main#content article li {
 }
 
 main#content hr {
-  height: 1px;
+  height: 0.1rem;
   border: 0;
   background: var(--border);
   margin: 2.2rem 0;
@@ -347,7 +347,7 @@ main#content ul#posts {
 main#content ul#posts li.post-entry {
   margin: 0;
   padding: 1.4rem 0;
-  border-top: 1px solid var(--border);
+  border-top: 0.1rem solid var(--border);
 }
 
 main#content ul#posts li.post-entry > a {
@@ -356,7 +356,7 @@ main#content ul#posts li.post-entry > a {
   color: inherit;
 }
 
-main#content ul#posts .post-title {
+main#content .post-title {
   font-size: var(--text-lg);
   font-weight: 700;
   margin: 0;
@@ -368,13 +368,13 @@ main#content ul#posts li.post-entry:hover .post-title {
   color: var(--accent);
 }
 
-main#content ul#posts .post-meta {
+main#content .post-meta {
   font-size: var(--text-2xs);
   color: var(--muted);
   margin-top: 0.2rem;
 }
 
-main#content ul#posts .post-desc {
+main#content .post-desc {
   font-size: var(--text-xs);
   color: var(--muted);
   margin: 0.5rem 0 0;
@@ -383,7 +383,7 @@ main#content ul#posts .post-desc {
 main#content article .backlink-entry h3 {
   margin-top: 2.2rem;
   padding-top: 1.4rem;
-  border-top: 1px solid var(--border);
+  border-top: 0.1rem solid var(--border);
   font-size: var(--text-sm);
 }
 
@@ -460,7 +460,7 @@ main#content header#post-header .post-meta {
   color: var(--muted);
   margin-top: 0.4rem;
   padding-bottom: 1.4rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 0.1rem solid var(--border);
 }
 
 main#content header#post-header + p {
@@ -468,7 +468,7 @@ main#content header#post-header + p {
 }
 
 main#content #toc {
-  border: 1px solid var(--border);
+  border: 0.1rem solid var(--border);
   line-height: 1.6;
   margin: 1.8rem 0;
   padding: 0.8rem 1.4rem;
@@ -600,8 +600,8 @@ main#content .photo-grid figure img {
   aspect-ratio: var(--ar);
   object-fit: cover;
   margin: 0;
-  border: 1px solid var(--border);
-  border-radius: 2px;
+  border: 0.1rem solid var(--border);
+  border-radius: 0.2rem;
 }
 
 main#content .photo-grid figure figcaption {
@@ -613,7 +613,7 @@ main#content blockquote {
   font-style: italic;
   margin: 1.3rem 0;
   padding: 0.2rem 1.5rem;
-  border-left: 3px solid var(--border);
+  border-left: 0.3rem solid var(--border);
   color: var(--muted);
 }
 
@@ -646,7 +646,7 @@ main#content pre code {
 main#content .footnotes {
   font-size: 0.85em;
   color: var(--muted);
-  border-top: 1px solid var(--border);
+  border-top: 0.1rem solid var(--border);
   padding-top: 1rem;
 }
 
@@ -678,7 +678,7 @@ main#content .instagram-media {
   margin: 0;
 }
 
-@media (min-width: 700px) {
+@media (min-width: 43.75em) {
   #banner-inner {
     flex-direction: row;
     flex-wrap: wrap;
@@ -704,7 +704,7 @@ main#content .instagram-media {
   }
 }
 
-@media (min-width: 960px) {
+@media (min-width: 60em) {
   #layout.has-sidebar {
     display: grid;
     grid-template-columns: 22rem minmax(0, 1fr);
@@ -748,10 +748,10 @@ html[data-theme="dark"] body {
 
 .sr-only {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: 0.1rem;
+  height: 0.1rem;
   padding: 0;
-  margin: -1px;
+  margin: -0.1rem;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

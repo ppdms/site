@@ -166,7 +166,7 @@ const viewerData = JSON.stringify(viewerPhotos).replaceAll("<", "\\u003c");
           <img
             src={item.defaultSrc}
             srcset={item.srcset}
-            sizes="(min-width: 960px) 45vw, (min-width: 700px) 48vw, 96vw"
+            sizes="(min-width: 60em) 45vw, (min-width: 43.75em) 48vw, 96vw"
             width={item.width}
             height={item.height}
             loading={isFirstRow ? "eager" : "lazy"}

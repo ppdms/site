@@ -38,7 +38,7 @@ Initially, I tried using RTMP as the transfer protocol for the connection betwee
 ## Architecture Diagram
 
 <div class="diagram-container" style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1.5rem 0;">
-  <div style="min-width: 720px;">
+  <div style="min-width: 72rem;">
 <svg role="img" aria-labelledby="svg-arch-title svg-arch-desc" width="100%" height="500" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;">
   <title id="svg-arch-title">Real-time Video Streaming with SRT Architecture Diagram</title>
   <desc id="svg-arch-desc">Architecture diagram showing video streaming flow from remote house cameras via RTSP to Raspberry Pi, mediamtx, Wireguard, Starlink, Internet, and into remote server with Frigate and Home Assistant.</desc>

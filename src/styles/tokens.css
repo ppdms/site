@@ -69,7 +69,7 @@ html[data-theme="dark"] {
   }
 }
 
-@media (min-width: 700px) {
+@media (min-width: 43.75em) {
   :root {
     --side-padding: 2rem;
   }
