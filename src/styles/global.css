@@ -581,8 +581,11 @@ main#content.wide .post-prose {
   margin-right: auto;
 }
 
+/* Phones use full-width photos. The row limit also drives the JS grouping,
+   so the initial CSS layout and the enhanced layout share one breakpoint. */
 main#content .photo-grid {
   --row-h: 30rem;
+  --row-limit: 1;
   display: flex;
   flex-wrap: wrap;
   align-items: start;
@@ -592,7 +595,7 @@ main#content .photo-grid {
 
 /* Equal-height rows; the layout balances image areas by choosing row breaks. */
 main#content .photo-grid figure {
-  flex: calc(var(--ar) * 100) 1 calc(var(--ar) * var(--row-h));
+  flex: 0 0 100%;
   min-width: 0;
   margin: 0;
 }
@@ -600,12 +603,9 @@ main#content .photo-grid figure {
 main#content .photo-row {
   display: flex;
   flex: 0 0 100%;
+  flex-wrap: wrap;
   align-items: start;
   gap: inherit;
-}
-
-main#content .photo-row figure {
-  flex-basis: 0;
 }
 
 main#content .photo-grid figure a {
@@ -728,6 +728,22 @@ main#content .instagram-media {
 
   main#content header#post-header h1 {
     font-size: var(--text-5xl);
+  }
+
+  main#content .photo-grid {
+    --row-limit: 3;
+  }
+
+  main#content .photo-grid figure {
+    flex: calc(var(--ar) * 100) 1 calc(var(--ar) * var(--row-h));
+  }
+
+  main#content .photo-row {
+    flex-wrap: nowrap;
+  }
+
+  main#content .photo-row figure {
+    flex-basis: 0;
   }
 }
 

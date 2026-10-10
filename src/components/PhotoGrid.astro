@@ -206,12 +206,14 @@ const viewerData = JSON.stringify(viewerPhotos).replaceAll("<", "\\u003c");
     let rowEnds: number[] = [];
 
     const arrangeRows = (width: number): void => {
-      const gap = parseFloat(getComputedStyle(grid).columnGap);
+      const style = getComputedStyle(grid);
+      const gap = parseFloat(style.columnGap);
+      const rowLimit = Number(style.getPropertyValue("--row-limit"));
       const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
       const targetSize = Math.min(42 * rem, width / 2);
       const rows = computePhotoRows(aspects, width, gap, {
         targetArea: targetSize * targetSize,
-        maxPhotos: Math.max(1, Math.min(3, Math.round((width + gap) / (22 * rem + gap)))),
+        maxPhotos: Math.max(1, Math.min(rowLimit, Math.round((width + gap) / (22 * rem + gap)))),
       });
       if (rows.length === 0) return;
 
