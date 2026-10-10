@@ -153,31 +153,34 @@ const viewerPhotos = gridItems.map((item) => ({
 const viewerData = JSON.stringify(viewerPhotos).replaceAll("<", "\\u003c");
 ---
 
-<div class="photo-grid travel-gallery" data-folder={folder}>
-  {gridItems.map((item, index) => {
-    const isFirstRow = index < 2;
-    return (
-      <figure style={`--ar: ${item.width / item.height}`}>
-        <a
-          href={item.fullViewSrc}
-          aria-label={item.linkLabel}
-          data-id={item.filename}
-        >
-          <img
-            src={item.defaultSrc}
-            srcset={item.srcset}
-            sizes="(min-width: 60em) 45vw, (min-width: 43.75em) 48vw, 96vw"
-            width={item.width}
-            height={item.height}
-            loading={isFirstRow ? "eager" : "lazy"}
-            decoding="async"
-            alt={item.alt}
-          />
-        </a>
-        {item.hasCaption && <figcaption>{item.caption}</figcaption>}
-      </figure>
-    );
-  })}
+<div class="travel-gallery" data-folder={folder}>
+  <div class="photo-grid">
+    {gridItems.map((item, index) => {
+      const isFirstRow = index < 2;
+      const aspect = item.width / item.height;
+      return (
+        <figure style={`--ar: ${aspect}`}>
+          <a
+            href={item.fullViewSrc}
+            aria-label={item.linkLabel}
+            data-id={item.filename}
+          >
+            <img
+              src={item.defaultSrc}
+              srcset={item.srcset}
+              sizes="(min-width: 60em) 45vw, (min-width: 43.75em) 48vw, 96vw"
+              width={item.width}
+              height={item.height}
+              loading={isFirstRow ? "eager" : "lazy"}
+              decoding="async"
+              alt={item.alt}
+            />
+          </a>
+          {item.hasCaption && <figcaption>{item.caption}</figcaption>}
+        </figure>
+      );
+    })}
+  </div>
   <PhotoViewer id={`viewer-${folder}`} />
   <script is:inline type="application/json" id={`viewer-data-${folder}`} set:html={viewerData}></script>
 </div>
@@ -185,6 +188,7 @@ const viewerData = JSON.stringify(viewerPhotos).replaceAll("<", "\\u003c");
 <script>
   import { createViewer } from "@ppdms/gallerydeluxe";
   import type { Photo } from "@ppdms/gallerydeluxe/types";
+  import { computePhotoRows } from "@ppdms/gallerydeluxe/layout";
 
   const galleries = document.querySelectorAll<HTMLElement>(".travel-gallery");
   for (const gallery of galleries) {
@@ -195,6 +199,49 @@ const viewerData = JSON.stringify(viewerPhotos).replaceAll("<", "\\u003c");
     if (!(dialog instanceof HTMLDialogElement) || !dataElement) continue;
 
     const viewerPhotos = JSON.parse(dataElement.textContent || "[]") as Photo[];
+    const grid = gallery.querySelector<HTMLElement>(".photo-grid")!;
+    const figures = Array.from(grid.querySelectorAll<HTMLElement>("figure"));
+    const images = figures.map((figure) => figure.querySelector("img")!);
+    const aspects = viewerPhotos.map((photo) => photo.width / photo.height);
+    let rowEnds: number[] = [];
+
+    const arrangeRows = (width: number): void => {
+      const gap = parseFloat(getComputedStyle(grid).columnGap);
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      const targetSize = Math.min(42 * rem, width / 2);
+      const rows = computePhotoRows(aspects, width, gap, {
+        targetArea: targetSize * targetSize,
+        maxPhotos: Math.max(1, Math.min(3, Math.round((width + gap) / (22 * rem + gap)))),
+      });
+      if (rows.length === 0) return;
+
+      if (rows.length !== rowEnds.length || rows.some((row, i) => row.end !== rowEnds[i])) {
+        const focused = document.activeElement;
+        const fragment = document.createDocumentFragment();
+        for (const row of rows) {
+          const element = document.createElement("div");
+          element.className = "photo-row";
+          for (let i = row.start; i < row.end; i++) element.append(figures[i]);
+          fragment.append(element);
+        }
+        grid.replaceChildren(fragment);
+        if (focused instanceof HTMLElement && grid.contains(focused)) {
+          focused.focus({ preventScroll: true });
+        }
+        rowEnds = rows.map((row) => row.end);
+      }
+
+      for (const row of rows) {
+        for (let i = row.start; i < row.end; i++) {
+          images[i].sizes = `${row.height * aspects[i]}px`;
+        }
+      }
+    };
+
+    arrangeRows(grid.getBoundingClientRect().width);
+    const gridObserver = new ResizeObserver(([entry]) => arrangeRows(entry.contentRect.width));
+    gridObserver.observe(grid);
+
     const viewer = createViewer(dialog, viewerPhotos, {
       syncImageQuery: false,
       enableExif: false,

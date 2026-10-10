@@ -12,7 +12,6 @@
     linear-gradient(90deg, light-dark(rgba(30, 30, 30, 0.025), rgba(222, 209, 198, 0.045)) 0.1rem, transparent 0.1rem),
     linear-gradient(0deg, light-dark(rgba(30, 30, 30, 0.018), rgba(222, 209, 198, 0.035)) 0.1rem, transparent 0.1rem),
     light-dark(#f7f5ef, var(--bg));
-  --gd-board-border: light-dark(rgba(204, 196, 177, 0.62), var(--border));
   --gd-board-ink: light-dark(#221f1b, var(--text));
   --gd-before-bg:
     linear-gradient(180deg, light-dark(rgba(255, 255, 255, 0.7), transparent), light-dark(rgba(255, 255, 255, 0.1), transparent) 34%, light-dark(rgba(94, 74, 46, 0.1), transparent)),
@@ -50,8 +49,6 @@
      own edge padding, so any extra top padding lands the first row lower
      than its side insets and off the grid. */
   padding: 0.1rem 0.1rem 4.8rem;
-  border: 0.1rem solid var(--gd-board-border);
-  border-radius: 0;
   background: var(--gd-board-bg);
   background-size: auto, auto, 3.4rem 3.4rem, 3.4rem 3.4rem, auto;
   color: var(--gd-board-ink);
@@ -153,6 +150,9 @@
   right: var(--gd-polaroid-side);
   bottom: 0.7rem;
   height: calc(var(--gd-polaroid-caption) - 1.4rem);
+  /* The frame supplies the inset, not the article figcaption's extra padding. */
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -211,8 +211,9 @@ html[data-theme="dark"] #gallery-page {
   }
 }
 
+/* Both caption lines stay visible on phones; the layout reserves their width. */
 @media (max-width: 47.5em) {
   #gallery-page .gd-label-meta {
-    display: none;
+    font-size: 1rem;
   }
 }

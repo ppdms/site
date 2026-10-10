@@ -27,9 +27,11 @@ function inlineGallerySheet(): Plugin {
       if (id !== resolvedId) return undefined;
 
       const result = await esbuild({
+        absWorkingDir: fileURLToPath(new URL(".", import.meta.url)),
         entryPoints: [SHEET_RUNTIME_ENTRY],
         bundle: true,
         write: false,
+        metafile: true,
         format: "iife",
         target: "es2020",
         minify: true,
@@ -37,6 +39,11 @@ function inlineGallerySheet(): Plugin {
         charset: "utf8",
         logLevel: "silent",
       });
+
+      // The inline bundle must be invalidated when its layout dependencies change.
+      for (const input of Object.keys(result.metafile.inputs)) {
+        this.addWatchFile(fileURLToPath(new URL(input, import.meta.url)));
+      }
 
       const code = result.outputFiles?.[0]?.text ?? "";
       // Keep the script payload from closing the tag it is inlined into.

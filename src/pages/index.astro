@@ -1,10 +1,13 @@
 ---
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
+import { Image, getImage } from "astro:assets";
 import envelopeSource from "bootstrap-icons/icons/envelope-fill.svg?raw";
 import githubSource from "bootstrap-icons/icons/github.svg?raw";
 import linkedinSource from "bootstrap-icons/icons/linkedin.svg?raw";
 import { faGoodreads } from "@fortawesome/free-brands-svg-icons";
+import headshot from "../content/headshot.webp";
+import headshotWide from "../content/headshot-wide.webp";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import PostList from "../components/PostList.astro";
 
@@ -30,6 +33,12 @@ if (homeEntries.length !== 1) {
 const { Content: HomeContent } = await render(homeEntries[0]);
 const visiblePosts = posts.filter((post) => !post.data.draft);
 
+const portrait = await getImage({
+  src: headshot,
+  widths: [220, 440, 660],
+  format: "webp",
+});
+
 // Sort descending by date, slug as deterministic tie-breaker
 visiblePosts.sort((a, b) => {
   const dateDiff = b.data.date.getTime() - a.data.date.getTime();
@@ -40,26 +49,49 @@ visiblePosts.sort((a, b) => {
 
 <SiteLayout hasSidebar>
   <div slot="sidebar" class="home-sidebar">
-    <HomeContent />
-    <h2 id="more-of-me">More of Me</h2>
-    <ul>
-      <li>
-        <Fragment set:html={envelopeIcon} />
-        <a href="mailto:vassilis@papadim.as">vassilis@papadim.as</a>
-      </li>
-      <li>
-        <Fragment set:html={githubIcon} />
-        <a href="https://github.com/ppdms">GitHub</a>
-      </li>
-      <li>
-        <Fragment set:html={linkedinIcon} />
-        <a href="https://www.linkedin.com/in/ppdms/">LinkedIn</a>
-      </li>
-      <li>
-        <Fragment set:html={goodreadsIcon} />
-        <a href="https://www.goodreads.com/papadimas">Goodreads</a>
-      </li>
-    </ul>
+    <h2 id="about">About</h2>
+    <div class="home-profile">
+      <p>
+        <picture>
+          <source
+            media="(min-width: 30em)"
+            srcset={portrait.srcSet.attribute}
+            sizes="220px"
+            width={headshot.width}
+            height={headshot.height}
+          />
+          <Image
+            src={headshotWide}
+            alt="Portrait of Vassilis Papadimas"
+            widths={[384, 768, 960, 1280, 1920]}
+            sizes="calc(100vw - 40px)"
+            loading="eager"
+          />
+        </picture>
+      </p>
+      <div class="home-bio">
+        <HomeContent />
+        <h2 id="more-of-me">More of Me</h2>
+        <ul>
+          <li>
+            <Fragment set:html={envelopeIcon} />
+            <a href="mailto:vassilis@papadim.as">vassilis@papadim.as</a>
+          </li>
+          <li>
+            <Fragment set:html={githubIcon} />
+            <a href="https://github.com/ppdms">GitHub</a>
+          </li>
+          <li>
+            <Fragment set:html={linkedinIcon} />
+            <a href="https://www.linkedin.com/in/ppdms/">LinkedIn</a>
+          </li>
+          <li>
+            <Fragment set:html={goodreadsIcon} />
+            <a href="https://www.goodreads.com/papadimas">Goodreads</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <h3 class="section-title">Posts</h3>

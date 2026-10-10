@@ -215,6 +215,18 @@ aside#sidebar p {
   color: var(--text);
 }
 
+.home-sidebar img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1.2rem;
+}
+
+/* Separate the portrait from the bio more than consecutive text paragraphs. */
+aside#sidebar .home-profile > p {
+  margin-bottom: 1.6rem;
+}
+
 aside#sidebar ul {
   list-style: none;
   margin: 0;
@@ -570,22 +582,30 @@ main#content.wide .post-prose {
 }
 
 main#content .photo-grid {
-  --row-h: 22rem;
+  --row-h: 30rem;
   display: flex;
   flex-wrap: wrap;
+  align-items: start;
   gap: 0.8rem;
   margin: 2.4rem 0;
 }
 
-main#content .photo-grid::after {
-  content: "";
-  flex: calc(1e3 * 100) 1 0%;
-}
-
+/* Equal-height rows; the layout balances image areas by choosing row breaks. */
 main#content .photo-grid figure {
   flex: calc(var(--ar) * 100) 1 calc(var(--ar) * var(--row-h));
   min-width: 0;
   margin: 0;
+}
+
+main#content .photo-row {
+  display: flex;
+  flex: 0 0 100%;
+  align-items: start;
+  gap: inherit;
+}
+
+main#content .photo-row figure {
+  flex-basis: 0;
 }
 
 main#content .photo-grid figure a {
@@ -665,7 +685,7 @@ main#content .instagram-media {
 }
 
 #layout.gallery-layout {
-  /* The contact sheet is a full-bleed board: the library scales its row
+  /* The contact sheet is a full-bleed, borderless board: the library scales its row
      height and edge padding from the viewport width, so capping the layout
      would leave the page background showing either side of the board. */
   max-width: none;
@@ -676,6 +696,17 @@ main#content .instagram-media {
 #layout.gallery-layout main#content {
   max-width: none;
   margin: 0;
+}
+
+/* Match the picture's 30em cutoff: phones use the supplied landscape crop.
+   The square portrait gets a column until the desktop sidebar takes over. */
+@media (min-width: 30em) {
+  .home-profile {
+    display: grid;
+    grid-template-columns: 22rem minmax(0, 1fr);
+    align-items: start;
+    gap: 3.2rem;
+  }
 }
 
 @media (min-width: 43.75em) {
@@ -698,13 +729,13 @@ main#content .instagram-media {
   main#content header#post-header h1 {
     font-size: var(--text-5xl);
   }
-
-  main#content .photo-grid {
-    --row-h: 30rem;
-  }
 }
 
 @media (min-width: 60em) {
+  .home-profile {
+    display: block;
+  }
+
   #layout.has-sidebar {
     display: grid;
     grid-template-columns: 22rem minmax(0, 1fr);

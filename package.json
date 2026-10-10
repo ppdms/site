@@ -24,7 +24,7 @@
     "@fortawesome/free-brands-svg-icons": "7.3.1",
     "@ppdms/gallerydeluxe": "*",
     "bootstrap-icons": "1.13.1",
-    "leaflet": "1.9.4"
+    "maplibre-gl": "6.12.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
@@ -32,7 +32,6 @@
     "@astrojs/rss": "4.0.19",
     "@cloudflare/vitest-plugin": "1.1.4",
     "@cloudflare/workers-types": "5.20260904.1",
-    "@types/leaflet": "1.9.22",
     "@types/node": "24.13.3",
     "astro": "7.3.1",
     "esbuild": "^0.28.1",

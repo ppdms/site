@@ -2,8 +2,6 @@
 title: "Vassilis Papadimas"
 ---
 
-## About
-
 I’m a software engineer based in Athens, Greece.
 
 I’m interested in distributed systems, self-hosted infrastructure, and free software.
