@@ -1,0 +1,61 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  posts: CollectionEntry<"posts">[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="post-list">
+  {posts.map((post) => (
+    <li>
+      <a href={`/${post.data.slug}/`}>{post.data.title}</a>
+      {post.data.description && <p>{post.data.description}</p>}
+      <p class="meta">
+        <time datetime={post.data.date.toISOString().slice(0, 10)}>{post.data.date.getUTCFullYear()}</time>
+        {post.data.type === "travel" ? " · Travel" : " · Writing"}
+      </p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  /* The same entry as the home page's Writing column, on the grid. */
+  :global(main#content) .post-list {
+    display: grid;
+    grid-template-columns: var(--grid);
+    column-gap: var(--gutter);
+    row-gap: 3.2rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  :global(main#content) .post-list a {
+    font-family: var(--font-serif);
+    font-size: var(--t-text);
+    line-height: var(--lh-item);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  :global(main#content) .post-list p {
+    margin-top: 0.2rem;
+    color: var(--muted);
+  }
+
+  :global(main#content) .post-list .meta {
+    margin-top: 0.4rem;
+    font-size: var(--t-meta);
+    line-height: var(--lh-meta);
+    color: var(--faint);
+  }
+
+  @media (max-width: 47.99em) {
+    :global(main#content) .post-list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

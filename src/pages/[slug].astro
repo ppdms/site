@@ -1,0 +1,198 @@
+---
+export const prerender = true;
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import type { MarkdownHeading } from "astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import PostHeader from "../components/PostHeader.astro";
+import PhotoGrid from "../components/PhotoGrid.astro";
+
+export async function getStaticPaths() {
+  const posts: CollectionEntry<"posts">[] = await getCollection("posts");
+  const visiblePosts = posts.filter((post) => !post.data.draft);
+  const seenSlugs = new Set<string>();
+  for (const post of visiblePosts) {
+    if (seenSlugs.has(post.data.slug)) {
+      throw new Error(`Duplicate post slug: ${post.data.slug}`);
+    }
+    seenSlugs.add(post.data.slug);
+  }
+  return visiblePosts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const sectionHeadings: MarkdownHeading[] = headings;
+
+const isTravel = post.data.type === "travel";
+// Articles with several sections get a contents column beside the text.
+const sections = isTravel ? [] : sectionHeadings.filter((heading) => heading.depth === 2);
+const showContents = sections.length >= 3;
+const travelFolders: Record<string, string> = {
+  denmark: "denmark",
+  portugal: "portugal",
+  "postcards-from-italy": "rome",
+  "kefalonia-in-may": "kefalonia",
+  "norway-denmark": "scandinavia",
+};
+const travelFolder = isTravel ? travelFolders[post.data.slug] : undefined;
+if (isTravel && !travelFolder) {
+  throw new Error(`No travel image folder configured for ${post.data.slug}`);
+}
+---
+
+<SiteLayout
+  title={post.data.title}
+  description={post.data.description}
+  type="article"
+  wide={isTravel}
+>
+  <article class="post-article">
+    <PostHeader
+      title={post.data.title}
+      date={post.data.date}
+      type={post.data.type}
+      author={post.data.author}
+    />
+
+    {showContents ? (
+      <div class="article-body">
+        <div class="prose">
+          <Content />
+        </div>
+        <nav class="contents" aria-label="Contents">
+          <p class="contents-title">Contents</p>
+          <ol>
+            {sections.map((section) => (
+              <li><a href={`#${section.slug}`}>{section.text}</a></li>
+            ))}
+          </ol>
+        </nav>
+      </div>
+    ) : (
+      <div class="prose">
+        <Content />
+      </div>
+    )}
+
+    {isTravel && travelFolder && (
+      <PhotoGrid
+        folder={travelFolder}
+        photoCaptions={post.data.photo_captions}
+        captions={post.data.captions}
+        alts={post.data.alts}
+      />
+    )}
+  </article>
+</SiteLayout>
+
+<script is:inline>
+  // Marks the section being read: the last heading above the upper third of
+  // the window. Without script the list is simply a list of links.
+  (() => {
+    const links = [...document.querySelectorAll(".contents a")];
+    const targets = links.map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))));
+    if (!links.length || targets.some((target) => !target)) return;
+    let current = -1;
+    const update = () => {
+      const line = window.innerHeight / 3;
+      let index = 0;
+      targets.forEach((target, i) => {
+        if (target.getBoundingClientRect().top <= line) index = i;
+      });
+      if (index === current) return;
+      links[current]?.removeAttribute("aria-current");
+      links[index].setAttribute("aria-current", "true");
+      current = index;
+    };
+    update();
+    addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update);
+  })();
+</script>
+
+<style>
+  .post-article {
+    width: 100%;
+  }
+
+  .article-body {
+    display: grid;
+    grid-template-columns: var(--grid);
+    column-gap: var(--gutter);
+    align-items: start;
+  }
+
+  .article-body > :global(.prose) {
+    grid-column: 1 / span 2;
+  }
+
+  /* A flat gray panel in the third column that stays in view. */
+  .contents {
+    grid-column: 3;
+    position: sticky;
+    top: 3.2rem;
+    padding: 2.4rem;
+    background: var(--block);
+  }
+
+  .contents-title {
+    margin: 0 0 1.2rem;
+    font-size: var(--t-meta);
+    line-height: var(--lh-meta);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .contents ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: section;
+  }
+
+  .contents li {
+    display: grid;
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    counter-increment: section;
+  }
+
+  .contents li + li {
+    margin-top: 0.4rem;
+  }
+
+  .contents li::before {
+    content: counter(section);
+    font-variant-numeric: tabular-nums;
+    color: var(--faint);
+  }
+
+  :global(main#content) .contents a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  :global(main#content) .contents a:hover,
+  :global(main#content) .contents a[aria-current] {
+    color: var(--text);
+  }
+
+  @media (max-width: 47.99em) {
+    .article-body {
+      display: block;
+    }
+
+    .contents {
+      display: none;
+    }
+  }
+</style>

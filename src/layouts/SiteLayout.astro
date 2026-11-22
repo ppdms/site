@@ -1,0 +1,165 @@
+---
+import Header from "../components/Header.astro";
+import "@fontsource-variable/inter/opsz.css";
+import "@fontsource-variable/inter/opsz-italic.css";
+import "@fontsource-variable/source-serif-4/opsz.css";
+import "@fontsource-variable/source-serif-4/opsz-italic.css";
+import "../styles/global.css";
+import "../styles/prose.css";
+// The two faces nearly all text is set in, preloaded so they are requested at
+// once rather than after the stylesheet has been laid out; a cached page then
+// paints in them from the first frame instead of swapping in from a fallback.
+import serifFont from "@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-normal.woff2?url";
+import sansFont from "@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2?url";
+
+interface Props {
+  title?: string;
+  description?: string;
+  type?: "website" | "article";
+  isGallery?: boolean;
+  hasSidebar?: boolean;
+  wide?: boolean;
+}
+
+const {
+  title,
+  description = "my home on the internet",
+  type = "website",
+  isGallery = false,
+  hasSidebar = false,
+  wide = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} — Vassilis Papadimas` : "Vassilis Papadimas";
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site || "https://papadim.as").toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={serifFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={sansFont} as="font" type="font/woff2" crossorigin />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="Vassilis Papadimas" href="/index.xml" />
+
+    <!-- OpenGraph -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Vassilis Papadimas" />
+
+    <!-- Inline theme initialization to prevent flash of unstyled theme -->
+    <script is:inline>
+      try {
+        const t = localStorage.getItem("theme");
+        if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else if (t === "light") {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      } catch {}
+    </script>
+
+    <!-- Keep justified paragraphs hidden until fonts and line breaks are ready.
+         prose.css reveals them after 1.2s even if the script fails. -->
+    <script is:inline>
+      document.documentElement.classList.add("jt-pending");
+    </script>
+
+    <slot name="head" />
+
+    <!-- Cloudflare Web Analytics -->
+    <script
+      is:inline
+      defer
+      src="/analytics/b.js"
+      data-cf-beacon='{"token": "47d06284daa047e88682a5dd2e516207"}'
+    ></script>
+  </head>
+  <body>
+    <a href="#content" class="skip-link">Skip to main content</a>
+    <Header />
+    <div id="layout" class:list={{ "has-sidebar": hasSidebar, "gallery-layout": isGallery }}>
+      {hasSidebar && (
+        <aside id="sidebar">
+          <slot name="sidebar" />
+        </aside>
+      )}
+      <main id="content" class:list={{ wide }}>
+        <slot />
+      </main>
+    </div>
+    <footer id="footer"></footer>
+
+    <!-- Justified paragraphs are broken into lines as a whole, as TeX does
+         (src/scripts/justify.ts). Hyphenation patterns load only on pages
+         that have justified text. -->
+    <script>
+      import { justify } from "../scripts/justify";
+      justify();
+    </script>
+
+    <!-- Theme controller. Plain inline JS: processed Astro scripts do not
+         resolve in the Cloudflare adapter's dev environment. -->
+    <script is:inline>
+      function initThemeController() {
+        const toggleBtn = document.getElementById("theme-toggle");
+        if (!toggleBtn) return;
+
+        function getEffectiveTheme() {
+          const currentAttr = document.documentElement.getAttribute("data-theme");
+          if (currentAttr === "dark" || currentAttr === "light") {
+            return currentAttr;
+          }
+          return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+
+        function updateButtonLabel() {
+          const effective = getEffectiveTheme();
+          const next = effective === "dark" ? "light" : "dark";
+          toggleBtn?.setAttribute("aria-label", `Switch to ${next} theme`);
+          toggleBtn?.setAttribute("title", `Switch to ${next} theme`);
+          toggleBtn?.setAttribute("data-mode", effective);
+        }
+
+        updateButtonLabel();
+
+        toggleBtn.addEventListener("click", () => {
+          const current = getEffectiveTheme();
+          const next = current === "dark" ? "light" : "dark";
+          document.documentElement.setAttribute("data-theme", next);
+          try {
+            localStorage.setItem("theme", next);
+          } catch {
+            // Nonfatal storage error
+          }
+          updateButtonLabel();
+        });
+
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+          try {
+            if (!localStorage.getItem("theme")) {
+              document.documentElement.removeAttribute("data-theme");
+              updateButtonLabel();
+            }
+          } catch {
+            document.documentElement.removeAttribute("data-theme");
+            updateButtonLabel();
+          }
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initThemeController);
+      } else {
+        initThemeController();
+      }
+    </script>
+  </body>
+</html>

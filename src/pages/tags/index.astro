@@ -1,0 +1,64 @@
+---
+export const prerender = true;
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+
+const posts: CollectionEntry<"posts">[] = await getCollection("posts");
+const visiblePosts = posts.filter((post) => !post.data.draft);
+const tags = new Map<string, number>();
+for (const post of visiblePosts) {
+  for (const tag of post.data.tags) {
+    tags.set(tag, (tags.get(tag) || 0) + 1);
+  }
+}
+const sortedTags = [...tags.entries()].sort(([a], [b]) => a.localeCompare(b));
+---
+
+<SiteLayout title="Tags" description="Posts by tag.">
+  <section class="taxonomy-page">
+    <header id="post-header">
+      <h1>Tags</h1>
+    </header>
+    {sortedTags.length > 0 ? (
+      <ul class="taxonomy-list">
+        {sortedTags.map(([tag, count]) => (
+          <li>
+            <a href={`/tags/${encodeURIComponent(tag)}/`}>{tag}</a>
+            <span>{count}</span>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="taxonomy-empty">
+        No tags yet. <a href="/posts/">See all posts.</a>
+      </p>
+    )}
+  </section>
+</SiteLayout>
+
+<style>
+  /* Name and count on one line, ruled, in the first column. */
+  :global(main#content) .taxonomy-list {
+    max-width: calc((var(--container) - 2 * var(--gutter)) / 3);
+    list-style: none;
+    padding: 0;
+  }
+
+  :global(main#content) .taxonomy-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.6rem;
+    padding: 0.8rem 0;
+    border-bottom: 0.1rem solid var(--rule);
+  }
+
+  :global(main#content) .taxonomy-list span {
+    font-variant-numeric: tabular-nums;
+    color: var(--faint);
+  }
+
+  :global(main#content) .taxonomy-empty {
+    color: var(--muted);
+  }
+</style>

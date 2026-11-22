@@ -1,0 +1,443 @@
+---
+export const prerender = true;
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
+import gallery from "../data/gallery.json";
+import mosaicManifest from "../data/gallery-mosaic.json";
+import { mosaicSources } from "../lib/gallery/mosaic";
+import headshot from "../content/headshot.webp";
+import headshotWide from "../content/headshot-wide.webp";
+import mosaic from "../content/gallery-mosaic.webp";
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+/*
+ * Home: who I am, then the work on the three-column grid. Trips are photo
+ * cards; the gallery is the one solid blue block; writing, reading and
+ * contact share the last row.
+ */
+
+const homeEntries = await getCollection("home");
+if (homeEntries.length !== 1) {
+  throw new Error(`Expected exactly one home content entry, found ${homeEntries.length}`);
+}
+const { Content: HomeContent } = await render(homeEntries[0]);
+
+const allPosts: CollectionEntry<"posts">[] = await getCollection("posts");
+const posts = allPosts
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime() || a.data.slug.localeCompare(b.data.slug));
+
+// A travel post's photos live beside its index.md. The card shows the one
+// its frontmatter names as cover, else the first by filename.
+const postImages = import.meta.glob<{ default: ImageMetadata }>("../content/posts/**/*.{jpeg,jpg,JPG,JPEG}", {
+  eager: true,
+});
+function leadImage(post: CollectionEntry<"posts">) {
+  const parts = post.filePath?.split("/") ?? [];
+  if (parts.at(-1) !== "index.md") return undefined;
+  const folder = parts.at(-2);
+  const inFolder = Object.keys(postImages)
+    .filter((path) => path.split("/").at(-2) === folder)
+    .sort();
+  const cover = post.data.cover;
+  const match = cover ? inFolder.find((path) => path.split("/").at(-1) === cover) : inFolder[0];
+  if (cover && !match) {
+    throw new Error(`Post "${post.data.slug}" names cover "${cover}", which is not in ${folder}/`);
+  }
+  if (!match) return undefined;
+  // As in PhotoGrid: use the metadata clone, so the build emits only the
+  // resized copies and never the full-size original.
+  const imported = postImages[match].default as ImageMetadata & { clone?: ImageMetadata; fsPath?: string };
+  return (imported.clone ? { ...imported.clone, fsPath: imported.fsPath } : imported) as ImageMetadata;
+}
+
+const year = (post: CollectionEntry<"posts">) => String(post.data.date.getUTCFullYear());
+
+const travels = await Promise.all(
+  posts
+    .filter((post) => post.data.type === "travel")
+    .map(async (post) => {
+      const image = leadImage(post);
+      const img = image ? await getImage({ src: image, widths: [400, 800, 1200], format: "webp" }) : undefined;
+      return { post, img };
+    }),
+);
+const writing = posts.filter((post) => post.data.type !== "travel");
+
+if (JSON.stringify(mosaicSources(gallery.images)) !== JSON.stringify(mosaicManifest)) {
+  throw new Error("Gallery mosaic is out of date. Run `bun run gallery:mosaic`.");
+}
+
+const portrait = await getImage({ src: headshot, widths: [320, 640, 960], format: "webp" });
+const portraitWide = await getImage({ src: headshotWide, widths: [384, 768, 960, 1280], format: "webp" });
+---
+
+<SiteLayout>
+  <h1 class="sr-only">Vassilis Papadimas</h1>
+
+  <section class="home-row intro">
+    <div class="bio">
+      <HomeContent />
+    </div>
+    <picture class="portrait">
+      <source
+        media="(min-width: 48em)"
+        srcset={portrait.srcSet.attribute}
+        sizes="32rem"
+        width={headshot.width}
+        height={headshot.height}
+      />
+      <img
+        src={portraitWide.src}
+        srcset={portraitWide.srcSet.attribute}
+        sizes="calc(100vw - 4rem)"
+        width={headshotWide.width}
+        height={headshotWide.height}
+        alt="Portrait of Vassilis Papadimas"
+        loading="eager"
+        decoding="async"
+      />
+    </picture>
+  </section>
+
+  <section class="home-block" aria-labelledby="travels">
+    <h2 class="section-title" id="travels">Travels</h2>
+    <ul class="cards">
+      {travels.map(({ post, img }) => (
+        <li>
+          <a class="card" href={`/${post.data.slug}/`}>
+            {img && (
+              <img
+                src={img.src}
+                srcset={img.srcSet.attribute}
+                sizes="(min-width: 48em) 32rem, 100vw"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+            <span class="card-title">{post.data.title}</span>
+            <span class="card-text">{post.data.description}</span>
+            <span class="card-meta"><time datetime={post.data.date.toISOString().slice(0, 10)}>{year(post)}</time></span>
+          </a>
+        </li>
+      ))}
+      <li>
+        <a class="card" href="/gallery/">
+          <img class="card-mosaic" src={mosaic.src} width={mosaic.width} height={mosaic.height} alt="" loading="lazy" decoding="async" />
+          <span class="card-title">Gallery</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="home-row columns">
+    <div>
+      <h2 class="section-title">Writing</h2>
+      <ul class="entries">
+        {writing.map((post) => (
+          <li>
+            <a href={`/${post.data.slug}/`}>{post.data.title}</a>
+            {post.data.description && <p>{post.data.description}</p>}
+            <p class="meta"><time datetime={post.data.date.toISOString().slice(0, 10)}>{year(post)}</time></p>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="section-title">Reading</h2>
+      <ul class="entries">
+        <li>
+          <a href="/backlinks/">Backlinks</a>
+          <p><span class="phrase">Things I found</span> <span class="phrase">thought-provoking.</span></p>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="section-title">Elsewhere</h2>
+      <ul class="entries links">
+        <li><a href="mailto:vassilis@papadim.as">vassilis@papadim.as</a></li>
+        <li><a href="https://github.com/ppdms">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/ppdms/">LinkedIn</a></li>
+        <li><a href="https://www.goodreads.com/papadimas">Goodreads</a></li>
+      </ul>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  /* Scoped under main#content so these outrank the article defaults. */
+
+  :global(main#content) .home-row {
+    display: grid;
+    grid-template-columns: var(--grid);
+    column-gap: var(--gutter);
+    row-gap: 4rem;
+  }
+
+  :global(main#content) .intro {
+    align-items: start;
+    margin-bottom: 9.6rem;
+  }
+
+  :global(main#content) .bio {
+    grid-column: 1 / span 2;
+    font-family: var(--font-serif);
+    font-size: var(--t-lead);
+    line-height: var(--lh-lead);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  :global(main#content) .bio :global(p) {
+    max-width: 24em;
+    text-wrap: pretty;
+  }
+
+  :global(main#content) .bio :global(p + p) {
+    margin-top: 1.6rem;
+  }
+
+  /* The introduction is set by hand (src/content/home.md): every .line ends
+     where it was written to end, and when a line is wider than the column
+     (only on phones) it breaks between its phrases, never inside one. At
+     every desktop size each line fits: the widest, the first paragraph,
+     is 652px at 32px beside a 661px column at the narrowest. */
+  :global(main#content) .bio :global(.line) {
+    display: block;
+  }
+
+  :global(main#content) .portrait {
+    grid-column: 3;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--photo-blank);
+  }
+
+  :global(main#content) .portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+  }
+
+  /* Beside the square portrait the introduction is set smaller than the
+     photograph and centred on it: the block is trimmed to its first line's
+     cap height and its last line's baseline (Source Serif 4: cap height
+     0.67, ascent 1.04, descent 0.34 of the size), so the space left above
+     the capitals equals the space left below the baseline.
+
+     Its size steps through the type scale with the photograph, the largest
+     step at which the three paragraphs (one line, then two, then two) fill
+     no more than about four fifths of its height: 20px up to 56em, 25px up
+     to 68em, 32px beyond. Lines are a little more open than running text
+     (about 1.37), and paragraphs half a line apart. */
+  @media (min-width: 48em) {
+    /* The row is a sandwich between the name and the Travels label: from the
+       photograph's bottom edge to the label's capitals is the same 74px as
+       from the name's baseline to the photograph's top edge (the label's
+       capitals start 5px into its line box). */
+    :global(main#content) .intro {
+      margin-bottom: 6.87rem;
+    }
+
+    :global(main#content) .bio {
+      --bio-size: var(--t-text);
+      --bio-lh: 2.8rem;
+      align-self: center;
+      margin-top: calc(0.32em - var(--bio-lh) / 2);
+      margin-bottom: calc(0.35em - var(--bio-lh) / 2);
+      font-size: var(--bio-size);
+      line-height: var(--bio-lh);
+    }
+
+    :global(main#content) .bio :global(p + p) {
+      margin-top: calc(var(--bio-lh) / 2);
+    }
+  }
+
+  @media (min-width: 56em) {
+    :global(main#content) .bio {
+      --bio-size: var(--t-head);
+      --bio-lh: 3.4rem;
+    }
+  }
+
+  @media (min-width: 68em) {
+    :global(main#content) .bio {
+      --bio-size: var(--t-lead);
+      --bio-lh: 4.4rem;
+    }
+  }
+
+  :global(main#content) .home-block {
+    margin-bottom: 9.6rem;
+  }
+
+  :global(main#content) .cards {
+    display: grid;
+    grid-template-columns: var(--grid);
+    column-gap: var(--gutter);
+    row-gap: 4.8rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  /* Cards keep their own height, so the solid block matches a photograph
+     exactly rather than stretching to the row. */
+  :global(main#content) .cards > li {
+    display: block;
+  }
+
+  :global(main#content) .card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  :global(main#content) .card > img {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    margin-bottom: 1.6rem;
+    background: var(--photo-blank);
+  }
+
+  :global(main#content) .card > .card-mosaic {
+    object-fit: fill;
+    background: transparent;
+    transition: opacity 120ms ease;
+  }
+
+  :global(main#content) .card:hover .card-mosaic {
+    opacity: 0.88;
+  }
+
+  :global(main#content) .card-title {
+    font-family: var(--font-serif);
+    font-size: var(--t-text);
+    line-height: var(--lh-item);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  :global(main#content) .card-text {
+    margin-top: 0.2rem;
+    font-size: var(--t-ui);
+    line-height: var(--lh-ui);
+    color: var(--muted);
+  }
+
+  :global(main#content) .card-meta {
+    margin-top: 0.4rem;
+    font-size: var(--t-meta);
+    line-height: var(--lh-meta);
+    color: var(--faint);
+  }
+
+  :global(main#content) .card:hover .card-title {
+    color: var(--accent);
+  }
+
+  :global(main#content) .card:hover {
+    color: var(--text);
+  }
+
+  :global(main#content) .columns {
+    align-items: start;
+  }
+
+  :global(main#content) .entries {
+    list-style: none;
+    padding: 0;
+  }
+
+  :global(main#content) .entries > li + li {
+    margin-top: 1.6rem;
+  }
+
+  :global(main#content) .entries a {
+    font-family: var(--font-serif);
+    font-size: var(--t-text);
+    line-height: var(--lh-item);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  :global(main#content) .entries p {
+    margin-top: 0.2rem;
+    font-size: var(--t-ui);
+    line-height: var(--lh-ui);
+    color: var(--muted);
+  }
+
+  :global(main#content) .entries .meta {
+    margin-top: 0.4rem;
+    font-size: var(--t-meta);
+    line-height: var(--lh-meta);
+    color: var(--faint);
+  }
+
+  :global(main#content) .entries.links a {
+    font-family: var(--font-sans);
+    font-size: var(--t-ui);
+    line-height: var(--lh-ui);
+    font-weight: 500;
+    letter-spacing: -0.011em;
+  }
+
+  :global(main#content) .entries.links > li + li {
+    margin-top: 0.4rem;
+  }
+
+  @media (max-width: 47.99em) {
+    :global(main#content) .home-row,
+    :global(main#content) .cards {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    :global(main#content) .intro {
+      row-gap: 2rem;
+      margin-bottom: 4.8rem;
+    }
+
+    :global(main#content) .bio {
+      grid-column: 1;
+      grid-row: 2;
+      letter-spacing: -0.01em;
+    }
+
+    :global(main#content) .portrait {
+      grid-column: 1;
+      grid-row: 1;
+      width: 100%;
+      aspect-ratio: 3 / 2;
+    }
+
+    :global(main#content) .home-block {
+      margin-bottom: 4.8rem;
+    }
+
+    :global(main#content) .cards {
+      row-gap: 4rem;
+    }
+  }
+  @media (max-width: 22.49em) {
+    /* The narrowest phones (under 360px): at 25px the phrase "self-hosted
+       infrastructure," is wider than the column, so the introduction takes
+       the 20px step, where every phrase fits. */
+    :global(main#content) .bio {
+      font-size: 2rem;
+      line-height: 2.8rem;
+    }
+  }
+</style>

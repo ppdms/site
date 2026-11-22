@@ -1,0 +1,26 @@
+---
+export const prerender = true;
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import PostList from "../../components/PostList.astro";
+
+const posts: CollectionEntry<"posts">[] = await getCollection("posts");
+const visiblePosts = posts.filter((post) => !post.data.draft);
+
+visiblePosts.sort((a, b) => {
+  const dateDiff = b.data.date.getTime() - a.data.date.getTime();
+  if (dateDiff !== 0) return dateDiff;
+  return a.data.slug.localeCompare(b.data.slug);
+});
+---
+
+<SiteLayout title="Posts" description="Articles and travel photographs by Vassilis Papadimas">
+  <div class="posts-page">
+    <header id="post-header">
+      <h1>Posts</h1>
+      <p class="post-dek">Articles on technology, engineering, and travel notes.</p>
+    </header>
+    <PostList posts={visiblePosts} />
+  </div>
+</SiteLayout>

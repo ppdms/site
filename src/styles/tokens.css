@@ -1,0 +1,131 @@
+/* papadim.as design tokens.
+   Black on white at full contrast; secondary text is the text color at
+   reduced opacity. Two optical-size variable typefaces: Source Serif 4 for
+   the voice (titles, reading, quotes, captions) and Inter for the apparatus
+   (navigation, labels, descriptions, dates). One saturated blue, used for
+   links on hover. A three-column grid that every page shares. html is 62.5%,
+   so 1rem = 10px throughout. */
+
+:root {
+  color-scheme: light dark;
+
+  --font-serif: "Source Serif 4 Variable", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", Menlo, Consolas, monospace;
+
+  /* Color */
+  --bg: #ffffff;
+  --text: #000000;
+  --muted: rgb(0 0 0 / 0.55);
+  --faint: rgb(0 0 0 / 0.32);
+  --rule: rgb(0 0 0 / 0.12);
+  --block: #f0f0f0;
+  --accent: #1a5fb4;
+  --on-accent: #ffffff;
+  --focus: #1a5fb4;
+  --photo-blank: #e8e8e8;
+  --selection-bg: rgb(26 95 180 / 0.2);
+
+  /* Type. One scale, each step about 1.25 times the last:
+     13, 16, 20, 25, 32, 40, 50. Every size on the site is one of these; the
+     line height travels with it. Serif steps carry the voice, sans steps
+     the apparatus. */
+  --t-meta: 1.3rem;      /* sans: labels, years, dates in lists, EXIF */
+  --lh-meta: 2rem;
+  --t-ui: 1.6rem;        /* sans: navigation, descriptions, notes, page dates */
+  --lh-ui: 2.4rem;
+  --t-caption: 1.6rem;   /* serif: photograph captions */
+  --lh-caption: 2.4rem;
+  --t-text: 2rem;        /* serif: reading text, quotes */
+  --lh-text: 3rem;
+  --lh-item: 2.8rem;     /* serif at --t-text, set tighter: titles in lists, h3 */
+  --t-head: 2.5rem;      /* serif: site name, section headings */
+  --lh-head: 3.2rem;
+  --t-lead: 3.2rem;      /* serif: the introduction on the home page */
+  --lh-lead: 4.2rem;
+  --t-name: 4rem;        /* serif: the name in the banner */
+  --lh-name: 4.8rem;
+  --t-display: 5rem;     /* serif: page titles */
+  --lh-display: 5.6rem;
+  --t-code: 1.4rem;
+  --lh-code: 2.2rem;
+
+  /* Older names, kept for the viewer and gallery styles. */
+  --t-small: var(--t-meta);
+  --lh-small: var(--lh-meta);
+  --t-body: var(--t-ui);
+  --lh-body: var(--lh-ui);
+
+  /* Grid: three columns of 32rem with 6.4rem gutters at full width. */
+  --gutter: 6.4rem;
+  --container: 108.8rem;
+  --side: 3.2rem;
+  --grid: repeat(3, minmax(0, 1fr));
+
+  /* Compatibility aliases for page-local and gallery styles. */
+  --surface: var(--block);
+  --border: var(--rule);
+  --border-strong: var(--faint);
+  --accent-hover: var(--accent);
+  --accent-line: var(--rule);
+  --code-bg: var(--block);
+  --text-sm: var(--t-small);
+  --text-md: var(--t-body);
+  --space-2: 0.8rem;
+  --space-3: 1.2rem;
+  --space-4: 1.6rem;
+  --space-5: 2.4rem;
+  --radius-sm: 0;
+  --transition-fast: color 120ms ease;
+}
+
+/* Declared twice so the OS preference and a manual choice match. */
+html[data-theme="dark"] {
+  --bg: #000000;
+  --text: #ffffff;
+  --muted: rgb(255 255 255 / 0.6);
+  --faint: rgb(255 255 255 / 0.36);
+  --rule: rgb(255 255 255 / 0.16);
+  --block: #161616;
+  --accent: #5b9dd9;
+  --on-accent: #000000;
+  --focus: #8cc0f0;
+  --photo-blank: #1c1c1c;
+  --selection-bg: rgb(91 157 217 / 0.32);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    --bg: #000000;
+    --text: #ffffff;
+    --muted: rgb(255 255 255 / 0.6);
+    --faint: rgb(255 255 255 / 0.36);
+    --rule: rgb(255 255 255 / 0.16);
+    --block: #161616;
+    --accent: #5b9dd9;
+    --on-accent: #000000;
+    --focus: #8cc0f0;
+    --photo-blank: #1c1c1c;
+    --selection-bg: rgb(91 157 217 / 0.32);
+  }
+}
+
+/* Phones: the serif steps come down one notch; the sans steps stay. */
+@media (max-width: 47.99em) {
+  :root {
+    --side: 2rem;
+    --gutter: 3.2rem;
+
+    --t-text: 1.8rem;
+    --lh-text: 2.8rem;
+    --lh-item: 2.6rem;
+    --t-lead: 2.5rem;
+    --lh-lead: 3.2rem;
+    --t-name: 2.5rem;
+    --lh-name: 3.2rem;
+    --t-display: 3.2rem;
+    --lh-display: 4rem;
+    --t-code: 1.3rem;
+    --lh-code: 2rem;
+  }
+}

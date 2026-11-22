@@ -1,0 +1,139 @@
+---
+export const prerender = true;
+import { parseManifest } from "../lib/gallery/types";
+import { CAPTION_HEIGHT } from "../lib/gallery/layout";
+import { galleryLabel } from "../lib/gallery/labels";
+import galleryManifestSource from "../data/gallery.json?raw";
+import sheetRuntimeSource from "virtual:gallery-sheet";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import PhotoViewer from "../components/PhotoViewer.astro";
+import "../styles/gallery.css";
+
+const photos = parseManifest(JSON.parse(galleryManifestSource)).images;
+const viewerData = JSON.stringify(photos).replaceAll("<", "\\u003c");
+const cells = photos.map((photo) => {
+  const small = photo.sources.filter((source) => Math.max(source.width, source.height) <= 1280);
+  return {
+    photo,
+    sources: small.length ? small : photo.sources,
+    description: photo.caption || photo.alt,
+    label: galleryLabel(photo),
+  };
+});
+---
+
+<SiteLayout
+  title="Gallery"
+  description="A contact sheet of photographs by Vassilis Papadimas."
+  isGallery={true}
+>
+  <Fragment slot="head">
+    <script is:inline>
+      document.documentElement.classList.add("gallery-js");
+      if (new URLSearchParams(window.location.search).has("image")) {
+        document.documentElement.classList.add("gallery-image-deep-link");
+      }
+    </script>
+    <style is:inline>
+      html.gallery-image-deep-link .skip-link,
+      html.gallery-image-deep-link #banner,
+      html.gallery-image-deep-link #layout,
+      html.gallery-image-deep-link #footer {
+        visibility: hidden;
+      }
+
+      html.gallery-image-deep-link #gallery-viewer {
+        visibility: visible;
+      }
+    </style>
+  </Fragment>
+  <header id="post-header">
+    <h1 id="gallery-heading">Gallery</h1>
+  </header>
+  <section id="gallery-page" aria-labelledby="gallery-heading">
+    {photos.length === 0 ? (
+      <p class="gallery-empty">No photographs yet.</p>
+    ) : (
+      <div id="gallery-sheet" class="gallery-sheet" style={`--caption-height:${CAPTION_HEIGHT}px`}>
+        <div class="gallery-photo-list">
+          {cells.map(({ photo, sources, description, label }, index) => (
+              <figure class="gallery-photo" data-id={photo.id} data-width={photo.width}
+                data-height={photo.height} style={`--photo-aspect:${photo.width} / ${photo.height}`}>
+                <figcaption class="gallery-caption" aria-hidden="true">
+                  <span class="gallery-caption-title">{label.title}</span>
+                  {label.meta && <span class="gallery-caption-meta">{label.meta}</span>}
+                </figcaption>
+                <a class="gallery-photo-link" href={sources[sources.length - 1].src}
+                  data-label-auto={description ? undefined : ""}
+                  aria-label={description || `Open photo ${index + 1} of ${photos.length}`}>
+                  <img class="gallery-photo-image" src={sources[sources.length - 1].src}
+                    srcset={sources.map((source) => `${source.src} ${source.width}w`).join(", ")}
+                    sizes="(max-width: 30em) 80vw, (max-width: 47.5em) 45vw, (max-width: 80em) 24vw, (max-width: 105em) 18vw, 15vw"
+                    loading="lazy" decoding="async" alt={photo.alt} />
+                </a>
+              </figure>
+          ))}
+        </div>
+      </div>
+    )}
+    <!-- Runs the moment the sheet above has been parsed, so the cells are
+         never shown in an arrangement the visitor will not keep. -->
+    <script is:inline set:html={sheetRuntimeSource}></script>
+    <PhotoViewer id="gallery-viewer" />
+    <script
+      is:inline
+      type="application/json"
+      id="gallery-viewer-data"
+      set:html={viewerData}
+    />
+  </section>
+</SiteLayout>
+
+<script>
+  import { watchGalleryImages } from "../lib/gallery/runtime";
+  import { prefetchGallery } from "../lib/gallery/prefetch";
+  import type { Photo } from "../lib/gallery/types";
+  import { createViewer } from "../lib/viewer";
+
+  const container = document.getElementById("gallery-sheet");
+  const dialog = document.getElementById("gallery-viewer");
+  const dataElement = document.getElementById("gallery-viewer-data");
+  if (container && dialog instanceof HTMLDialogElement && dataElement) {
+    watchGalleryImages(container);
+
+    // The inline runtime has arranged the sheet by now, so DOM order is the
+    // order the visitor browses in.
+    const byId = new Map((JSON.parse(dataElement.textContent || "[]") as Photo[]).map((photo) => [photo.id, photo]));
+    const photos = Array.from(container.querySelectorAll<HTMLElement>(".gallery-photo"), (item) => byId.get(item.dataset.id!))
+      .filter((photo): photo is Photo => !!photo);
+    const viewer = createViewer(dialog, photos, {
+      syncImageQuery: true,
+      enableExif: true,
+    });
+
+    for (const link of container.querySelectorAll<HTMLAnchorElement>(".gallery-photo-link")) {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        const id = link.closest<HTMLElement>(".gallery-photo")?.dataset.id;
+        if (id) viewer.open(id, link);
+      });
+    }
+
+    container.setAttribute("data-viewer-ready", "");
+    const imageId = new URLSearchParams(window.location.search).get("image");
+    if (imageId !== null) {
+      if (byId.has(imageId)) {
+        viewer.open(imageId);
+      } else {
+        document.documentElement.classList.remove("gallery-image-deep-link");
+        const message = document.createElement("p");
+        message.className = "gallery-not-found";
+        message.textContent = "Photograph not found.";
+        container.before(message);
+      }
+    }
+    prefetchGallery(container, dialog, photos);
+  } else {
+    document.documentElement.classList.remove("gallery-image-deep-link");
+  }
+</script>

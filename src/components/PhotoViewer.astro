@@ -1,0 +1,10 @@
+---
+import "../styles/viewer.css";
+
+interface Props {
+  id?: string;
+}
+const { id = "gallery-viewer" } = Astro.props;
+---
+
+<dialog id={id} class="photo-viewer" aria-label="Photo viewer"></dialog>

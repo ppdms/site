@@ -1,0 +1,12 @@
+---
+export const prerender = true;
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="Page not found" description="The requested page could not be found.">
+  <header id="post-header">
+    <h1>Page not found</h1>
+    <p class="post-dek">The address does not point to a page on this site.</p>
+    <p class="post-meta"><a href="/">Go to the home page</a></p>
+  </header>
+</SiteLayout>
